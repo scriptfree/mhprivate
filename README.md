@@ -23,5 +23,10 @@ Loadstring placeholder
 <td>Working</td>
 <td>7/26/2024</td>
 </tr>
+<tr>
+<td>Super Evolution</td>
+<td>Working</td>
+<td>7/26/2024</td>
+</tr>
 </tbody>
 </table>
