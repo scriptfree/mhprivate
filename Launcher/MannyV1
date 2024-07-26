@@ -1,1 +1,117 @@
 
+-- Create a ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BlackRectangleUI"
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create a Frame
+local blackRectangle = Instance.new("Frame")
+blackRectangle.Name = "BlackRectangle"
+blackRectangle.Size = UDim2.new(0, 200, 0, 150) -- Increased height to accommodate the new button
+blackRectangle.Position = UDim2.new(0.5, -100, 0.5, -75) -- Centered on the screen
+blackRectangle.BackgroundColor3 = Color3.new(0, 0, 0) -- Black color
+blackRectangle.Parent = screenGui
+
+-- Create a TextLabel for the title
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(0, 200, 0, 20) -- Width: 200 pixels, Height: 20 pixels
+titleLabel.Position = UDim2.new(0, 0, 0, 0) -- Top left of the black rectangle
+titleLabel.BackgroundTransparency = 1 -- Make the background transparent
+titleLabel.Text = "Manny Hub" -- The title text
+titleLabel.TextColor3 = Color3.new(1, 1, 1) -- White color for the text
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left -- Align text to the left
+titleLabel.TextSize = 12 -- Set the font size to 12
+titleLabel.Parent = blackRectangle
+
+-- Create a TextButton for the first green button (Launch)
+local launchButton = Instance.new("TextButton")
+launchButton.Name = "LaunchButton"
+launchButton.Size = UDim2.new(0, 100, 0, 30) -- Width: 100 pixels, Height: 30 pixels
+launchButton.Position = UDim2.new(0.5, -50, 0.5, -20) -- Centered above the new button
+launchButton.BackgroundColor3 = Color3.new(0, 1, 0) -- Green color
+launchButton.Text = "Launch"
+launchButton.TextColor3 = Color3.new(0, 0, 0) -- Black color for the text
+launchButton.Parent = blackRectangle
+
+-- Create a TextButton for the second green button (Rejoin)
+local rejoinButton = Instance.new("TextButton")
+rejoinButton.Name = "RejoinButton"
+rejoinButton.Size = UDim2.new(0, 100, 0, 30) -- Width: 100 pixels, Height: 30 pixels
+rejoinButton.Position = UDim2.new(0.5, -50, 0.5, 20) -- Positioned below the Launch button
+rejoinButton.BackgroundColor3 = Color3.new(0, 1, 0) -- Green color
+rejoinButton.Text = "Rejoin"
+rejoinButton.TextColor3 = Color3.new(0, 0, 0) -- Black color for the text
+rejoinButton.Parent = blackRectangle
+
+-- Create a TextButton for the red button
+local redButton = Instance.new("TextButton")
+redButton.Name = "RedButton"
+redButton.Size = UDim2.new(0, 20, 0, 20) -- Width: 20 pixels, Height: 20 pixels
+redButton.Position = UDim2.new(1, -20, 0, 0) -- Top right of the black rectangle
+redButton.BackgroundColor3 = Color3.new(1, 0, 0) -- Red color
+redButton.Text = "X"
+redButton.TextColor3 = Color3.new(1, 1, 1) -- White color for the text
+redButton.TextScaled = true -- Scale the text to fit the button
+redButton.Parent = blackRectangle
+
+-- Add functionality to execute a loadstring when the Launch button is clicked
+launchButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/Loader"))()
+end)
+
+-- Add functionality to rejoin the game when the Rejoin button is clicked
+rejoinButton.MouseButton1Click:Connect(function()
+    game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+end)
+
+-- Add functionality to delete the GUI and run a script when the red button is clicked
+redButton.MouseButton1Click:Connect(function()
+    -- Run the notification script
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification";
+        Text = "Goodbye!";
+        Duration = 2;
+    })
+    
+    -- Destroy the GUI
+    screenGui:Destroy()
+end)
+
+-- Drag functionality
+local UserInputService = game:GetService("UserInputService")
+
+local dragging = false
+local dragStart
+local startPos
+
+-- Function to handle the start of dragging
+local function onDragStart(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = blackRectangle.Position
+    end
+end
+
+-- Function to handle dragging movement
+local function onDragMove(input)
+    if dragging then
+        local delta = input.Position - dragStart
+        blackRectangle.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end
+
+-- Function to handle the end of dragging
+local function onDragEnd()
+    dragging = false
+end
+
+-- Connect input events to dragging functions
+blackRectangle.InputBegan:Connect(onDragStart)
+UserInputService.InputChanged:Connect(onDragMove)
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        onDragEnd()
+    end
+end)
