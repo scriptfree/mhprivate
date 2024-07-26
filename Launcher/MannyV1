@@ -1,1 +1,15 @@
 
+local Games = {
+[137885680] = "https://raw.githubusercontent.com/dogefriendyt/Doge-Hub/main/scripts/Zombie%20Rush",
+[4301323950] = "https://raw.githubusercontent.com/dogefriendyt/Doge-Hub/main/scripts/Zombie%20Rush",
+[574407221] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Superhero-Tycoon",
+}
+
+if Games[game.PlaceId] then
+    loadstring(game:HttpGet(Games[game.PlaceId]))()
+else
+  game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Error";
+                Text = "Game is not supported!";
+                Duration = 2;})
+end
