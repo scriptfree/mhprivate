@@ -1,6 +1,10 @@
 # [New] Manny Hub
 
 Manny Hub has a small variety of scripts for games all made by me and chatgpt.
+_
+Created: 7/26/2024
+Released: 7/26/2024
+_
 
 # Loadstring
 ```
