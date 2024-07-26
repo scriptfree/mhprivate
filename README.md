@@ -30,3 +30,8 @@ Loadstring placeholder
 </tr>
 </tbody>
 </table>
+
+# Changelogs
+
+**V1**
+- Manny Hub released
