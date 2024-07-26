@@ -9,11 +9,19 @@ Loadstring placeholder
 
 # Supported Games
 
-1. e
-2. e
-3. 3
-4. 3
-5. 3
-6. 4
-7. 5
-8. 
+<table>
+<thead>
+<tr>
+<th>Game</th>
+<th>Status</th>
+<th>Updated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Superhero Tycoon</td>
+<td>Working</td>
+<td>7/26/2024</td>
+</tr>
+</tbody>
+</table>
