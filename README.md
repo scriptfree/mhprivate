@@ -20,7 +20,7 @@ Loadstring placeholder
 <tbody>
 <tr>
 <td>Superhero Tycoon</td>
-<td>Working (7/26/2024)</td>
+<td>Working</td>
 <td>7/26/2024</td>
 </tr>
 </tbody>
