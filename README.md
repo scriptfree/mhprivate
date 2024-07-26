@@ -38,5 +38,5 @@ Loadstring placeholder
 
 # Changelogs
 
-**V1**
+V1 [7/26/2024]
 - Manny Hub released
