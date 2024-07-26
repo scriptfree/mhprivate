@@ -24,8 +24,8 @@ Loadstring placeholder
 <td>7/26/2024</td>
 </tr>
 <tr>
-<td>Super Evolution</td>
-<td>🟢Working</td>
+<td>Blob Eating Simulator</td>
+<td>🟢Working | 🐛Buggy | ✅Undetected</td>
 <td>7/26/2024</td>
 </tr>
 </tbody>
