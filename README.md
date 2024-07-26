@@ -36,7 +36,9 @@ Loadstring placeholder
 </tbody>
 </table>
 
-# Changelogs
+# Links
 
-V1 [7/26/2024]
-- Manny Hub released
+**Discord**
+```
+https://discord.gg/7wKHbPgKQd
+```
