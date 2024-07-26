@@ -1,4 +1,3 @@
-
 -- Create a ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "BlackRectangleUI"
@@ -7,42 +6,48 @@ screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 -- Create a Frame
 local blackRectangle = Instance.new("Frame")
 blackRectangle.Name = "BlackRectangle"
-blackRectangle.Size = UDim2.new(0, 200, 0, 150) -- Increased height to accommodate the new button
-blackRectangle.Position = UDim2.new(0.5, -100, 0.5, -75) -- Centered on the screen
+blackRectangle.Size = UDim2.new(0, 150, 0, 180) -- Width set to 150, Height set to 180
+blackRectangle.Position = UDim2.new(0.5, -75, 0.5, -90) -- Centered on the screen with new width
 blackRectangle.BackgroundColor3 = Color3.new(0, 0, 0) -- Black color
 blackRectangle.Parent = screenGui
 
 -- Create a TextLabel for the title
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
-titleLabel.Size = UDim2.new(0, 200, 0, 20) -- Width: 200 pixels, Height: 20 pixels
-titleLabel.Position = UDim2.new(0, 0, 0, 0) -- Top left of the black rectangle
+titleLabel.Size = UDim2.new(0, 150, 0, 20) -- Width: 150 pixels, Height: 20 pixels
+titleLabel.Position = UDim2.new(0, 10, 0, 0) -- Moved slightly to the right
 titleLabel.BackgroundTransparency = 1 -- Make the background transparent
 titleLabel.Text = "Manny Hub" -- The title text
-titleLabel.TextColor3 = Color3.new(1, 1, 1) -- White color for the text
+titleLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Green color for the text
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left -- Align text to the left
 titleLabel.TextSize = 12 -- Set the font size to 12
 titleLabel.Parent = blackRectangle
 
--- Create a TextButton for the first green button (Launch)
-local launchButton = Instance.new("TextButton")
-launchButton.Name = "LaunchButton"
-launchButton.Size = UDim2.new(0, 100, 0, 30) -- Width: 100 pixels, Height: 30 pixels
-launchButton.Position = UDim2.new(0.5, -50, 0.5, -20) -- Centered above the new button
-launchButton.BackgroundColor3 = Color3.new(0, 1, 0) -- Green color
-launchButton.Text = "Launch"
-launchButton.TextColor3 = Color3.new(0, 0, 0) -- Black color for the text
-launchButton.Parent = blackRectangle
+-- Function to create a green button
+local function createGreenButton(name, text, position)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Size = UDim2.new(0, 100, 0, 30) -- Width: 100 pixels, Height: 30 pixels
+    button.Position = position
+    button.BackgroundColor3 = Color3.new(0, 1, 0) -- Green color
+    button.Text = text
+    button.TextColor3 = Color3.new(0, 0, 0) -- Black color for the text
+    button.TextSize = 10 -- Set the font size to 10
+    button.TextScaled = false -- Disable text scaling
+    button.Parent = blackRectangle
+    
+    -- Add rounded corners to the button
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8) -- Slightly rounded corners
+    corner.Parent = button
+    
+    return button
+end
 
--- Create a TextButton for the second green button (Rejoin)
-local rejoinButton = Instance.new("TextButton")
-rejoinButton.Name = "RejoinButton"
-rejoinButton.Size = UDim2.new(0, 100, 0, 30) -- Width: 100 pixels, Height: 30 pixels
-rejoinButton.Position = UDim2.new(0.5, -50, 0.5, 20) -- Positioned below the Launch button
-rejoinButton.BackgroundColor3 = Color3.new(0, 1, 0) -- Green color
-rejoinButton.Text = "Rejoin"
-rejoinButton.TextColor3 = Color3.new(0, 0, 0) -- Black color for the text
-rejoinButton.Parent = blackRectangle
+-- Create the green buttons
+local launchButton = createGreenButton("LaunchButton", "Launch", UDim2.new(0.5, -50, 0, 50))
+local listButton = createGreenButton("ListButton", "List", UDim2.new(0.5, -50, 0, 90))
+local discordButton = createGreenButton("DiscordButton", "Discord", UDim2.new(0.5, -50, 0, 130))
 
 -- Create a TextButton for the red button
 local redButton = Instance.new("TextButton")
@@ -60,9 +65,30 @@ launchButton.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/Loader"))()
 end)
 
--- Add functionality to rejoin the game when the Rejoin button is clicked
-rejoinButton.MouseButton1Click:Connect(function()
-    game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+-- Add functionality to copy the GitHub link to clipboard when the List button is clicked
+listButton.MouseButton1Click:Connect(function()
+    -- Set the clipboard to the GitHub link
+    setclipboard("https://github.com/scriptfree/MannyHub/tree/main?tab=readme-ov-file#supported-games")
+
+    -- Notify the user that the link was copied
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification";
+        Text = "Link copied to clipboard!";
+        Duration = 2;
+    })
+end)
+
+-- Add functionality to copy the Discord link to clipboard and notify when the Discord button is clicked
+discordButton.MouseButton1Click:Connect(function()
+    -- Set the clipboard to the Discord invite link
+    setclipboard("https://discord.gg/7wKHbPgKQd")
+
+    -- Notify the user that the invite link was copied
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification";
+        Text = "Invite link copied to clipboard!";
+        Duration = 2;
+    })
 end)
 
 -- Add functionality to delete the GUI and run a script when the red button is clicked
