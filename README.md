@@ -3,6 +3,7 @@
 Manny Hub has a small variety of scripts for games all made by me and chatgpt.
 
 Created: _7/26/2024_
+<br>
 Released: _7/26/2024_
 
 
