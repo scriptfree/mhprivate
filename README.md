@@ -25,7 +25,7 @@ Loadstring placeholder
 </tr>
 <tr>
 <td>Blob Eating Simulator</td>
-<td>🟢Working | 🐛Buggy | ✅Undetected</td>
+<td>🟢Working, 🐛Buggy, ✅Undetected</td>
 <td>7/26/2024</td>
 </tr>
 </tbody>
