@@ -1,6 +1,6 @@
 # [New] Manny Hub
 
-My script hub has 20+ games, all undetected, and easy to use.
+Manny Hub has a small variety of scripts for games all made by me and chatgpt.
 
 # Loadstring
 ```
