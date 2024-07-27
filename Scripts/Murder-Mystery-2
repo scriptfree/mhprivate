@@ -1,0 +1,114 @@
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Success";
+                Text = "Thanks for using Manny Hub!";
+                Duration = 2;})
+
+
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))() 
+local Window = Library.CreateLib("Manny Hub", "BloodTheme") 
+
+
+local Tab1 = Window:NewTab("Main")
+local Tab1Section = Tab1:NewSection("Configs")
+
+local function updateHighlight(player)
+    -- Check if the player has a character
+    if player.Character then
+        -- Find or create the highlight
+        local highlight = player.Character:FindFirstChild("Highlight")
+        if not highlight then
+            highlight = Instance.new("Highlight")
+            highlight.Name = "Highlight"
+            highlight.Parent = player.Character
+            highlight.OutlineTransparency = 0 -- Outline fully visible
+            highlight.FillTransparency = 0.5 -- Semi-transparent fill
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop -- Always visible
+        end
+        
+        -- Check the player's backpack for tools
+        local hasKnife = false
+        local hasGun = false
+        
+        if player.Backpack:FindFirstChild("Knife") then
+            hasKnife = true
+        end
+        if player.Backpack:FindFirstChild("Gun") then
+            hasGun = true
+        end
+
+        -- Set the highlight color based on the tools
+        if hasKnife then
+            highlight.FillColor = Color3.new(1, 0, 0) -- Red fill color for Knife
+            highlight.OutlineColor = Color3.new(1, 0, 0) -- Red outline color for Knife
+        elseif hasGun then
+            highlight.FillColor = Color3.new(0, 0, 1) -- Blue fill color for Gun
+            highlight.OutlineColor = Color3.new(0, 0, 1) -- Blue outline color for Gun
+        else
+            highlight.FillColor = Color3.new(0.5, 0.5, 0.5) -- Grey fill color for others
+            highlight.OutlineColor = Color3.new(1, 1, 1) -- White outline color for others
+        end
+    end
+end
+
+-- Function to update highlights for all players
+local function updateAllHighlights()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        updateHighlight(player)
+    end
+end
+
+-- Function to set up event listeners for a player
+local function setupPlayer(player)
+    -- Wait for the character to be added
+    player.CharacterAdded:Connect(function()
+        -- Add/update the highlight for the new player's character
+        updateHighlight(player)
+        
+        -- Update highlight if the player's backpack changes
+        player.Backpack.ChildAdded:Connect(function()
+            updateHighlight(player)
+        end)
+        player.Backpack.ChildRemoved:Connect(function()
+            updateHighlight(player)
+        end)
+    end)
+end
+
+-- Event listener for new players joining
+game.Players.PlayerAdded:Connect(function(player)
+    setupPlayer(player)
+end)
+
+-- Setup existing players
+for _, player in pairs(game.Players:GetPlayers()) do
+    setupPlayer(player)
+end
+
+Tab1Section:NewToggle("ESP", ".", function(t)
+    getgenv().FLO = t
+    while getgenv().FLO do
+
+updateAllHighlights()
+
+        wait(0.5)
+    end
+end)
+
+
+Tab1Section:NewButton("Get all gears", ".", function()
+
+
+end)
+
+Tab1Section:NewToggle("Auto collect cash", ".", function(t)
+getgenv().FLO = t
+while getgenv().FLO and wait(.1) do
+local args = {
+    [1] = 5,
+    [2] = "collectMoney",
+    [3] = game:GetService("Players").LocalPlayer
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("ReplicaRemoteEvents"):WaitForChild("Replica_ReplicaSignal"):FireServer(unpack(args))
+end
+end)
