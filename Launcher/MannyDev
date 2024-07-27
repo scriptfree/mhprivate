@@ -53,7 +53,7 @@ redButton.TextScaled = true
 redButton.Parent = blackRectangle
 
 launchButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/Developer-Loader"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/Load/Dev"))()
 end)
 
 redButton.MouseButton1Click:Connect(function()
