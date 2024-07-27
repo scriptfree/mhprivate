@@ -1,23 +1,20 @@
-game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "Success";
-                Text = "Thanks for using Manny Hub!";
-                Duration = 2;})
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Success";
+    Text = "Thanks for using Manny Hub!";
+    Duration = 2;
+})
 
-
-local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))() 
-local Window = Library.CreateLib("Manny Hub", "BloodTheme") 
-
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))()
+local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local torso = character:WaitForChild("HumanoidRootPart")
+local torso
 
 local function teleportCratesToPlayer()
     local crates = workspace:GetDescendants()
-    local playerPosition = torso.Position
 
     for _, item in ipairs(crates) do
         if item:IsA("BasePart") and item.Name == "Crate" then
@@ -38,14 +35,22 @@ local function teleportCratesToPlayer()
     end
 end
 
+local function initializeCharacter(character)
+    torso = character:WaitForChild("HumanoidRootPart")
+end
 
+player.CharacterAdded:Connect(function(character)
+    initializeCharacter(character)
+end)
 
+if player.Character then
+    initializeCharacter(player.Character)
+end
 
 Tab1Section:NewToggle("Bring all crates", ".", function(t)
-getgenv().FLO = t
-while getgenv().FLO and wait(1) do
-
-teleportCratesToPlayer()
-
-end
+    getgenv().FLO = t
+    while getgenv().FLO do
+        teleportCratesToPlayer()
+        wait(1)
+    end
 end)
