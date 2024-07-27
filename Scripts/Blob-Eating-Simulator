@@ -65,20 +65,28 @@ local function checkSizesAndTeleport()
     end
 end
 
--- Function to teleport a Blob object to the player's position
-local function teleportBlobToPlayer(blob)
+local function teleportBlobToPlayer(blob, hrp)
     if hrp and blob:IsA("BasePart") then
         blob.CFrame = hrp.CFrame
+    end
+end
+
+-- Function to get the player's HumanoidRootPart
+local function getPlayerHRP()
+    local player = game.Players.LocalPlayer
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        return player.Character.HumanoidRootPart
     end
 end
 
 -- Function to find and teleport all Blob objects inside the "Blobs" folder to the player
 local function teleportBlobsToPlayer()
     local blobsFolder = Workspace:FindFirstChild("Blobs")
+    local hrp = getPlayerHRP()
 
     if blobsFolder and blobsFolder:IsA("Folder") then
         for _, blob in pairs(blobsFolder:GetChildren()) do
-            teleportBlobToPlayer(blob)
+            teleportBlobToPlayer(blob, hrp)
             -- Removed the wait to make it manual
         end
     else
@@ -86,7 +94,20 @@ local function teleportBlobsToPlayer()
     end
 end
 
--- Call the function to manually start the teleport process
+-- Function to handle player respawn and update HRP
+local function onPlayerRespawn()
+    local player = game.Players.LocalPlayer
+    if player then
+        player.CharacterAdded:Connect(function()
+            -- Wait for the character to load and then run the teleport function
+            player.Character:WaitForChild("HumanoidRootPart")
+            teleportBlobsToPlayer()
+        end)
+    end
+end
+
+-- Call the function to handle respawn
+onPlayerRespawn()
 
 
 
@@ -106,4 +127,3 @@ end)
 Tab1Section:NewButton("Rejoin", "rejoins the same server", function()
 game:service("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
 end)
-
