@@ -10,9 +10,13 @@ Released: _7/26/2024_
 
 
 # Loadstring
+
+Official loadstring:
 ```
 loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/MannyV1'))()
 ```
+
+Unofficial loadstring:
 ```
 loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/MannyDev'))()
 ```
