@@ -10,10 +10,70 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
-
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local torso = character:WaitForChild("HumanoidRootPart")
+
+local originalPosition
+local platform
+local monstersFolder = workspace:WaitForChild("Monsters")
+
+-- Function to initialize the character and torso
+local function initializeCharacter(character)
+    torso = character:WaitForChild("HumanoidRootPart")
+end
+
+-- Function to teleport all items in the Monsters folder in front of the player's character
+local function teleportMonstersToPlayer()
+    local monsters = monstersFolder:GetChildren()
+    local playerPosition = torso.Position
+    local offsetPosition = playerPosition + torso.CFrame.LookVector * 5 -- 5 units in front of the player
+
+    for _, monster in ipairs(monsters) do
+        if monster:IsA("BasePart") then
+            monster.CFrame = CFrame.new(offsetPosition)
+            monster.CanCollide = false
+        elseif monster:IsA("Model") and monster.PrimaryPart then
+            local offset = monster.PrimaryPart.CFrame - monster.PrimaryPart.Position
+            monster:SetPrimaryPartCFrame(CFrame.new(offsetPosition) * offset)
+            for _, part in ipairs(monster:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end
+
+-- Connect to CharacterAdded event to handle respawns
+player.CharacterAdded:Connect(function(char)
+    character = char
+    initializeCharacter(character)
+end)
+
+-- Initialize for the current character if it exists
+if player.Character then
+    character = player.Character
+    initializeCharacter(character)
+end
+
+-- Function to create a platform
+local function createPlatform()
+    platform = Instance.new("Part")
+    platform.Size = Vector3.new(50, 1, 50)
+    platform.Position = Vector3.new(10000, 100, 10000) -- Far away position
+    platform.Anchored = true
+    platform.Parent = workspace
+end
+
+-- Function to remove the platform
+local function removePlatform()
+    if platform then
+        platform:Destroy()
+        platform = nil
+    end
+end
+
 
 -- Function to initialize the character and torso
 local function initializeCharacter(character)
@@ -53,7 +113,36 @@ if player.Character then
     initializeCharacter(character)
 end
 
--- Toggle to bring all loot
+
+Tab1Section:NewToggle("Toggle Platform and Bring Monsters", ".", function(t)
+    getgenv().TOGGLE_PLATFORM = t
+    while getgenv().TOGGLE_PLATFORM do
+        if torso then
+            if not platform then
+                -- Store the original position
+                originalPosition = torso.Position
+
+                -- Create the platform and teleport the player to it
+                createPlatform()
+                torso.CFrame = CFrame.new(platform.Position + Vector3.new(0, 3, 0)) -- Teleport above the platform
+            end
+            
+            -- Continuously teleport monsters in front of the player
+            teleportMonstersToPlayer()
+        end
+        wait(0.1) -- Adjust the wait time as needed
+    end
+
+    if not getgenv().TOGGLE_PLATFORM then
+        -- Teleport the player back to the original position and remove the platform
+        if originalPosition then
+            torso.CFrame = CFrame.new(originalPosition)
+        end
+        removePlatform()
+    end
+end)
+
+
 Tab1Section:NewToggle("Bring all loot", ".", function(t)
     getgenv().FLO = t
     while getgenv().FLO do
@@ -68,26 +157,5 @@ end)
 Tab1Section:NewButton("Teleport to shop", ".", function()
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
-
-end)
-
-Tab1Section:NewButton("Cancel wave", ".", function()
-
-local args = {
-    [1] = "cancel"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StartStage"):FireServer(unpack(args))
-
-end)
-
-
-Tab1Section:NewButton("Claim daily reward", ".", function()
-
-local args = {
-    [1] = "RewardClaimed"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("MainEvent"):FireServer(unpack(args))
 
 end)
