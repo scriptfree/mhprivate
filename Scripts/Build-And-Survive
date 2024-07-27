@@ -10,64 +10,23 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
-local player = game.Players.LocalPlayer
-local torso
-local savedPosition
-local teleportPlatform
-local monsterFolder = workspace:WaitForChild("Monsters")
-
-local function updateTorso()
-    local char = player.Character or player.CharacterAdded:Wait()
-    torso = char:WaitForChild("HumanoidRootPart")
-end
-
-local function bringMonstersToPlayer()
-    local monsters = monsterFolder:GetChildren()
-    local playerPos = torso.Position
-    local offsetPos = playerPos + torso.CFrame.LookVector * 5
-
-    for _, monster in ipairs(monsters) do
-        if monster:IsA("BasePart") then
-            monster.CFrame = CFrame.new(offsetPos)
-            monster.CanCollide = false
-        elseif monster:IsA("Model") and monster.PrimaryPart then
-            local offset = monster.PrimaryPart.CFrame - monster.PrimaryPart.Position
-            monster:SetPrimaryPartCFrame(CFrame.new(offsetPos) * offset)
-            for _, part in ipairs(monster:GetChildren()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-        end
-    end
-end
-
-local function createTeleportPlatform()
-    teleportPlatform = Instance.new("Part")
-    teleportPlatform.Size = Vector3.new(50, 1, 50)
-    teleportPlatform.Position = Vector3.new(10000, 100, 10000)
-    teleportPlatform.Anchored = true
-    teleportPlatform.Parent = workspace
-end
-
-local function removeTeleportPlatform()
-    if teleportPlatform then
-        teleportPlatform:Destroy()
-        teleportPlatform = nil
-    end
-end
 
 local function teleportMonsterDropsToPlayer()
-    local dropsFolder = workspace:WaitForChild("__DEBRIS"):WaitForChild("MonsterDrops")
-    local drops = dropsFolder:GetChildren()
-
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+    
+    local debrisFolder = workspace:WaitForChild("__DEBRIS")
+    local monsterDropsFolder = debrisFolder:WaitForChild("MonsterDrops")
+    local drops = monsterDropsFolder:GetChildren()
+    
     for _, drop in ipairs(drops) do
         if drop:IsA("BasePart") then
-            drop.CFrame = torso.CFrame
+            drop.CFrame = rootPart.CFrame
             drop.CanCollide = false
         elseif drop:IsA("Model") and drop.PrimaryPart then
             local offset = drop.PrimaryPart.CFrame - drop.PrimaryPart.Position
-            drop:SetPrimaryPartCFrame(torso.CFrame * offset)
+            drop:SetPrimaryPartCFrame(rootPart.CFrame * offset)
             for _, part in ipairs(drop:GetChildren()) do
                 if part:IsA("BasePart") then
                     part.CanCollide = false
@@ -77,50 +36,29 @@ local function teleportMonsterDropsToPlayer()
     end
 end
 
--- Ensure character updates correctly on respawn
-player.CharacterAdded:Connect(updateTorso)
-if player.Character then
-    updateTorso()
-end
 
-Tab1Section:NewToggle("Toggle Platform and Bring Monsters", ".", function(t)
-    getgenv().TOGGLE_PLATFORM_MONSTERS = t
-    spawn(function()
-        while getgenv().TOGGLE_PLATFORM_MONSTERS do
-            if torso then
-                if not teleportPlatform then
-                    savedPosition = torso.Position
-                    createTeleportPlatform()
-                    torso.CFrame = CFrame.new(teleportPlatform.Position + Vector3.new(0, 3, 0))
-                end
-                bringMonstersToPlayer()
-            end
-            wait(1) -- Adjust as needed
-        end
 
-        if not getgenv().TOGGLE_PLATFORM_MONSTERS then
-            if savedPosition then
-                torso.CFrame = CFrame.new(savedPosition)
-            end
-            removeTeleportPlatform()
-        end
-    end)
-end)
+
+
+
+
+
+
+
 
 Tab1Section:NewToggle("Bring all loot", ".", function(t)
     getgenv().FLO = t
-    spawn(function()
-        while getgenv().FLO do
-            if torso then
-                teleportMonsterDropsToPlayer()
-            end
-            wait(0.05)
-        end
-    end)
+    while getgenv().FLO do
+        teleportMonsterDropsToPlayer()
+        wait(0.05)
+    end
 end)
 
+
 Tab1Section:NewButton("Teleport to shop", ".", function()
+
     player.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
+
 end)
 
 Tab1Section:NewSlider("Walkspeed", ".", 200, 0, function(t)
