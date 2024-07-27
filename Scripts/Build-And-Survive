@@ -36,7 +36,32 @@ local function teleportMonsterDropsToPlayer()
     end
 end
 
+local function teleportMonstersToFrontOfPlayer()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
 
+    local thingsFolder = workspace:WaitForChild("__THINGS")
+    local monstersFolder = thingsFolder:WaitForChild("Monsters")
+    local monsters = monstersFolder:GetChildren()
+
+    local offsetPosition = rootPart.Position + rootPart.CFrame.LookVector * 5 -- 5 units in front of the player
+
+    for _, monster in ipairs(monsters) do
+        if monster:IsA("BasePart") then
+            monster.CFrame = CFrame.new(offsetPosition)
+            monster.CanCollide = false
+        elseif monster:IsA("Model") and monster.PrimaryPart then
+            local offset = monster.PrimaryPart.CFrame - monster.PrimaryPart.Position
+            monster:SetPrimaryPartCFrame(CFrame.new(offsetPosition) * offset)
+            for _, part in ipairs(monster:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end
 
 
 
@@ -51,6 +76,14 @@ Tab1Section:NewToggle("Bring all loot", ".", function(t)
     while getgenv().FLO do
         teleportMonsterDropsToPlayer()
         wait(0.05)
+    end
+end)
+
+Tab1Section:NewToggle("Bring all monsters", ".", function(t)
+    getgenv().MONSTER_TOGGLE = t
+    while getgenv().MONSTER_TOGGLE do
+        teleportMonstersToFrontOfPlayer()
+        wait(0.05) -- Adjust the interval as needed
     end
 end)
 
