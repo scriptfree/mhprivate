@@ -1,6 +1,6 @@
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&letterSpacing=&duration=2500&pause=1000&color=00FF00&background=000000&center=true&vCenter=true&repeat=false&width=1000&height=100&lines=Welcome+to+Manny+Hub.)](https://git.io/typing-svg)
 
-# [New] Manny Hub
+# Manny Hub
 
 Manny Hub has a small variety of scripts for games all made by me and chatgpt.
 
