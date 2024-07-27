@@ -11,6 +11,46 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
+local toolName = "Gun"
+
+-- Function to find the tool in players' inventories
+local function findToolInPlayers()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Backpack:FindFirstChild(toolName) or (player.Character and player.Character:FindFirstChild(toolName)) then
+            return true
+        end
+    end
+    return false
+end
+
+-- Function to find the dropped tool in the workspace
+local function findDroppedTool()
+    for _, tool in pairs(workspace:GetDescendants()) do
+        if tool:IsA("Tool") and tool.Name == toolName then
+            return tool
+        end
+    end
+    return nil
+end
+
+-- Main function to check for the tool and teleport
+local function checkAndTeleport()
+    if not findToolInPlayers() then
+        local droppedTool = findDroppedTool()
+        if droppedTool then
+            local player = game.Players.LocalPlayer
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = droppedTool.Handle.CFrame
+            end
+        else
+            print("Gun tool is not found in any inventory or dropped in the workspace.")
+        end
+    else
+        print("Gun tool is found in a player's inventory.")
+    end
+end
+
+-- Function to create or update a highlight around a player
 local function updateHighlight(player)
     -- Check if the player has a character
     if player.Character then
@@ -25,14 +65,14 @@ local function updateHighlight(player)
             highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop -- Always visible
         end
         
-        -- Check the player's backpack for tools
+        -- Check the player's backpack and character for tools
         local hasKnife = false
         local hasGun = false
         
-        if player.Backpack:FindFirstChild("Knife") then
+        if player.Backpack:FindFirstChild("Knife") or (player.Character and player.Character:FindFirstChild("Knife")) then
             hasKnife = true
         end
-        if player.Backpack:FindFirstChild("Gun") then
+        if player.Backpack:FindFirstChild("Gun") or (player.Character and player.Character:FindFirstChild("Gun")) then
             hasGun = true
         end
 
@@ -46,6 +86,21 @@ local function updateHighlight(player)
         else
             highlight.FillColor = Color3.new(0.5, 0.5, 0.5) -- Grey fill color for others
             highlight.OutlineColor = Color3.new(1, 1, 1) -- White outline color for others
+        end
+    end
+end
+
+-- Function to remove highlights from all players
+local function removeAllHighlights()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Character then
+            local highlight = player.Character:FindFirstChild("Highlight")
+            local hasKnife = player.Backpack:FindFirstChild("Knife") or (player.Character and player.Character:FindFirstChild("Knife"))
+            local hasGun = player.Backpack:FindFirstChild("Gun") or (player.Character and player.Character:FindFirstChild("Gun"))
+            
+            if highlight and not hasKnife and not hasGun then
+                highlight:Destroy()
+            end
         end
     end
 end
@@ -84,31 +139,23 @@ for _, player in pairs(game.Players:GetPlayers()) do
     setupPlayer(player)
 end
 
+-- Toggle ESP
 Tab1Section:NewToggle("ESP", ".", function(t)
     getgenv().FLO = t
-    while getgenv().FLO do
-
-updateAllHighlights()
-
-        wait(0.5)
+    if getgenv().FLO then
+        while getgenv().FLO do
+            updateAllHighlights()
+            wait(0.5)
+        end
+    else
+        removeAllHighlights()
     end
 end)
 
 
-Tab1Section:NewButton("Get all gears", ".", function()
 
+Tab1Section:NewButton("Teleport to gun", ".", function()
 
-end)
+checkAndTeleport()
 
-Tab1Section:NewToggle("Auto collect cash", ".", function(t)
-getgenv().FLO = t
-while getgenv().FLO and wait(.1) do
-local args = {
-    [1] = 5,
-    [2] = "collectMoney",
-    [3] = game:GetService("Players").LocalPlayer
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("ReplicaRemoteEvents"):WaitForChild("Replica_ReplicaSignal"):FireServer(unpack(args))
-end
 end)
