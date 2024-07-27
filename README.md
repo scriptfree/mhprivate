@@ -13,6 +13,9 @@ Released: _7/26/2024_
 ```
 loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/MannyV1'))()
 ```
+```
+loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/MannyDev'))()
+```
 
 # Supported Games
 
