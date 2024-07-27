@@ -72,4 +72,17 @@ end)
 
 
 
+Tab1Section:NewButton("Claim daily reward", ".", function()
+
+local args = {
+    [1] = "RewardClaimed"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("MainEvent"):FireServer(unpack(args))
+
+end)
+
+
+
+
 
