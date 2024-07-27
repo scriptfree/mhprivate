@@ -57,10 +57,11 @@ end)
 
 Tab1Section:NewButton("Teleport to shop", ".", function()
 
-    player.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
+
 
 end)
 
 Tab1Section:NewSlider("Walkspeed", ".", 200, 0, function(t)
-    player.Character.Humanoid.WalkSpeed = t
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 end)
