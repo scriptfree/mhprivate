@@ -1,0 +1,51 @@
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Success";
+                Text = "Thanks for using Manny Hub!";
+                Duration = 2;})
+
+
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))() 
+local Window = Library.CreateLib("Manny Hub", "BloodTheme") 
+
+
+local Tab1 = Window:NewTab("Main")
+local Tab1Section = Tab1:NewSection("Configs")
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local torso = character:WaitForChild("HumanoidRootPart")
+
+local function teleportCratesToPlayer()
+    local crates = workspace:GetDescendants()
+    local playerPosition = torso.Position
+
+    for _, item in ipairs(crates) do
+        if item:IsA("BasePart") and item.Name == "Crate" then
+            item.CFrame = torso.CFrame
+            item.CanCollide = false
+        elseif item:IsA("Model") and item.Name == "Crate" then
+            local primaryPart = item.PrimaryPart
+            if primaryPart then
+                local offset = item:GetPrimaryPartCFrame() - item:GetPrimaryPartCFrame().p
+                item:SetPrimaryPartCFrame(torso.CFrame * offset)
+                for _, part in ipairs(item:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+
+
+Tab1Section:NewToggle("Bring all crates", ".", function(t)
+getgenv().FLO = t
+while getgenv().FLO and wait(1) do
+
+teleportCratesToPlayer()
+
+end
+end)
