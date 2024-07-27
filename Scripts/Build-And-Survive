@@ -1,0 +1,2 @@
+--teleport to shop
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
