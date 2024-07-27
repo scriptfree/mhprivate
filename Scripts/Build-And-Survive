@@ -11,31 +11,28 @@ local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local torso = character:WaitForChild("HumanoidRootPart")
+local torso
+local savedPosition
+local teleportPlatform
+local monsterFolder = workspace:WaitForChild("Monsters")
 
-local originalPosition
-local platform
-local monstersFolder = workspace:WaitForChild("Monsters")
-
--- Function to initialize the character and torso
-local function initializeCharacter(character)
-    torso = character:WaitForChild("HumanoidRootPart")
+local function updateTorso()
+    local char = player.Character or player.CharacterAdded:Wait()
+    torso = char:WaitForChild("HumanoidRootPart")
 end
 
--- Function to teleport all items in the Monsters folder in front of the player's character
-local function teleportMonstersToPlayer()
-    local monsters = monstersFolder:GetChildren()
-    local playerPosition = torso.Position
-    local offsetPosition = playerPosition + torso.CFrame.LookVector * 5 -- 5 units in front of the player
+local function bringMonstersToPlayer()
+    local monsters = monsterFolder:GetChildren()
+    local playerPos = torso.Position
+    local offsetPos = playerPos + torso.CFrame.LookVector * 5
 
     for _, monster in ipairs(monsters) do
         if monster:IsA("BasePart") then
-            monster.CFrame = CFrame.new(offsetPosition)
+            monster.CFrame = CFrame.new(offsetPos)
             monster.CanCollide = false
         elseif monster:IsA("Model") and monster.PrimaryPart then
             local offset = monster.PrimaryPart.CFrame - monster.PrimaryPart.Position
-            monster:SetPrimaryPartCFrame(CFrame.new(offsetPosition) * offset)
+            monster:SetPrimaryPartCFrame(CFrame.new(offsetPos) * offset)
             for _, part in ipairs(monster:GetChildren()) do
                 if part:IsA("BasePart") then
                     part.CanCollide = false
@@ -45,42 +42,21 @@ local function teleportMonstersToPlayer()
     end
 end
 
--- Connect to CharacterAdded event to handle respawns
-player.CharacterAdded:Connect(function(char)
-    character = char
-    initializeCharacter(character)
-end)
-
--- Initialize for the current character if it exists
-if player.Character then
-    character = player.Character
-    initializeCharacter(character)
+local function createTeleportPlatform()
+    teleportPlatform = Instance.new("Part")
+    teleportPlatform.Size = Vector3.new(50, 1, 50)
+    teleportPlatform.Position = Vector3.new(10000, 100, 10000)
+    teleportPlatform.Anchored = true
+    teleportPlatform.Parent = workspace
 end
 
--- Function to create a platform
-local function createPlatform()
-    platform = Instance.new("Part")
-    platform.Size = Vector3.new(50, 1, 50)
-    platform.Position = Vector3.new(10000, 100, 10000) -- Far away position
-    platform.Anchored = true
-    platform.Parent = workspace
-end
-
--- Function to remove the platform
-local function removePlatform()
-    if platform then
-        platform:Destroy()
-        platform = nil
+local function removeTeleportPlatform()
+    if teleportPlatform then
+        teleportPlatform:Destroy()
+        teleportPlatform = nil
     end
 end
 
-
--- Function to initialize the character and torso
-local function initializeCharacter(character)
-    torso = character:WaitForChild("HumanoidRootPart")
-end
-
--- Function to teleport all items in the MonsterDrops folder to the player's character
 local function teleportMonsterDropsToPlayer()
     local dropsFolder = workspace:WaitForChild("__DEBRIS"):WaitForChild("MonsterDrops")
     local drops = dropsFolder:GetChildren()
@@ -101,61 +77,52 @@ local function teleportMonsterDropsToPlayer()
     end
 end
 
--- Connect to CharacterAdded event to handle respawns
-player.CharacterAdded:Connect(function(char)
-    character = char
-    initializeCharacter(character)
-end)
-
--- Initialize for the current character if it exists
+-- Ensure character updates correctly on respawn
+player.CharacterAdded:Connect(updateTorso)
 if player.Character then
-    character = player.Character
-    initializeCharacter(character)
+    updateTorso()
 end
 
-
 Tab1Section:NewToggle("Toggle Platform and Bring Monsters", ".", function(t)
-    getgenv().TOGGLE_PLATFORM = t
-    while getgenv().TOGGLE_PLATFORM do
-        if torso then
-            if not platform then
-                -- Store the original position
-                originalPosition = torso.Position
-
-                -- Create the platform and teleport the player to it
-                createPlatform()
-                torso.CFrame = CFrame.new(platform.Position + Vector3.new(0, 3, 0)) -- Teleport above the platform
+    getgenv().TOGGLE_PLATFORM_MONSTERS = t
+    spawn(function()
+        while getgenv().TOGGLE_PLATFORM_MONSTERS do
+            if torso then
+                if not teleportPlatform then
+                    savedPosition = torso.Position
+                    createTeleportPlatform()
+                    torso.CFrame = CFrame.new(teleportPlatform.Position + Vector3.new(0, 3, 0))
+                end
+                bringMonstersToPlayer()
             end
-            
-            -- Continuously teleport monsters in front of the player
-            teleportMonstersToPlayer()
+            wait(1) -- Adjust as needed
         end
-        wait(0.1) -- Adjust the wait time as needed
-    end
 
-    if not getgenv().TOGGLE_PLATFORM then
-        -- Teleport the player back to the original position and remove the platform
-        if originalPosition then
-            torso.CFrame = CFrame.new(originalPosition)
+        if not getgenv().TOGGLE_PLATFORM_MONSTERS then
+            if savedPosition then
+                torso.CFrame = CFrame.new(savedPosition)
+            end
+            removeTeleportPlatform()
         end
-        removePlatform()
-    end
+    end)
 end)
-
 
 Tab1Section:NewToggle("Bring all loot", ".", function(t)
     getgenv().FLO = t
-    while getgenv().FLO do
-        if torso then
-            teleportMonsterDropsToPlayer()
+    spawn(function()
+        while getgenv().FLO do
+            if torso then
+                teleportMonsterDropsToPlayer()
+            end
+            wait(0.05)
         end
-        wait(0.05)
-    end
+    end)
 end)
 
-
 Tab1Section:NewButton("Teleport to shop", ".", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
+end)
 
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
-
+Tab1Section:NewSlider("Walkspeed", ".", 200, 0, function(t)
+    player.Character.Humanoid.WalkSpeed = t
 end)
