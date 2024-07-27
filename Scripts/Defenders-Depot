@@ -101,3 +101,16 @@ local args = {
 game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("MainEvent"):FireServer(unpack(args))
 
 end)
+
+
+--Wastes your powerup
+Tab1Section:NewButton("Kill All", ".", function()
+
+local args = {
+    [1] = 4
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PowerUp"):FireServer(unpack(args))
+
+
+end)
