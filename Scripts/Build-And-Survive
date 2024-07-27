@@ -36,7 +36,9 @@ local function teleportMonsterDropsToPlayer()
     end
 end
 
-local function teleportMonstersToFrontOfPlayer()
+
+
+local function teleportMonstersToFixedPosition()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local rootPart = character:WaitForChild("HumanoidRootPart")
@@ -45,15 +47,15 @@ local function teleportMonstersToFrontOfPlayer()
     local monstersFolder = thingsFolder:WaitForChild("Monsters")
     local monsters = monstersFolder:GetChildren()
 
-    local offsetPosition = rootPart.Position + rootPart.CFrame.LookVector * 5 -- 5 units in front of the player
+    local fixedPosition = rootPart.Position + Vector3.new(0, 0, -10) -- Fixed position 5 units in front of the player
 
     for _, monster in ipairs(monsters) do
         if monster:IsA("BasePart") then
-            monster.CFrame = CFrame.new(offsetPosition)
+            monster.CFrame = CFrame.new(fixedPosition)
             monster.CanCollide = false
         elseif monster:IsA("Model") and monster.PrimaryPart then
             local offset = monster.PrimaryPart.CFrame - monster.PrimaryPart.Position
-            monster:SetPrimaryPartCFrame(CFrame.new(offsetPosition) * offset)
+            monster:SetPrimaryPartCFrame(CFrame.new(fixedPosition) * offset)
             for _, part in ipairs(monster:GetChildren()) do
                 if part:IsA("BasePart") then
                     part.CanCollide = false
@@ -82,7 +84,7 @@ end)
 Tab1Section:NewToggle("Bring all monsters", ".", function(t)
     getgenv().MONSTER_TOGGLE = t
     while getgenv().MONSTER_TOGGLE do
-        teleportMonstersToFrontOfPlayer()
+        teleportMonstersToFixedPosition()
         wait(0.05) -- Adjust the interval as needed
     end
 end)
