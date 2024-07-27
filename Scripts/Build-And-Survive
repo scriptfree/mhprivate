@@ -89,11 +89,15 @@ Tab1Section:NewToggle("Bring all monsters", ".", function(t)
     end
 end)
 
-
 Tab1Section:NewButton("Teleport to shop", ".", function()
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.75860595703125, -6.0400309562683105, 29.524982452392578)
 
+end)
+
+Tab1Section:NewButton("Teleport to safe spot", ".", function()
+
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-39.513980865478516, 262.00732421875, 422.0516052246094)
 
 end)
 
