@@ -23,6 +23,7 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/m
 
 # Supported Games
 
+For a more information about the scripts join the discord below.
 <table>
 <thead>
 <tr>
