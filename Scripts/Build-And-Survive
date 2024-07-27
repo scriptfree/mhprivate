@@ -62,6 +62,6 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-63.7586
 
 end)
 
-Tab1Section:NewSlider("Walkspeed", ".", 200, 0, function(t)
+Tab1Section:NewSlider("Walkspeed", ".", 200, 16, function(t)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 end)
