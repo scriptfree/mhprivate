@@ -63,7 +63,7 @@ For a more information about the scripts join the discord below.
 
 # Links
 
-**Discord**
+<a href="https://discord.gg/7wKHbPgKQd" target="_Blank">**Discord**</a>
 ```
 https://discord.gg/7wKHbPgKQd
 ```
