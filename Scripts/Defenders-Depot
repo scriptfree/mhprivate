@@ -54,3 +54,22 @@ Tab1Section:NewToggle("Bring all crates", ".", function(t)
         wait(1)
     end
 end)
+
+Tab1Section:NewToggle("Auto start wave", ".", function(t)
+    getgenv().FLO = t
+    while getgenv().FLO do
+
+local args = {
+    [1] = "spawn",
+    [2] = false
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StartStage"):FireServer(unpack(args))
+
+        wait(0.5)
+    end
+end)
+
+
+
+
