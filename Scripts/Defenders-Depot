@@ -70,6 +70,26 @@ game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StartS
     end
 end)
 
+Tab1Section:NewButton("Start wave", ".", function()
+
+local args = {
+    [1] = "spawn",
+    [2] = false
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StartStage"):FireServer(unpack(args))
+
+end)
+
+Tab1Section:NewButton("Cancel wave", ".", function()
+
+local args = {
+    [1] = "cancel"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("StartStage"):FireServer(unpack(args))
+
+end)
 
 
 Tab1Section:NewButton("Claim daily reward", ".", function()
@@ -81,8 +101,3 @@ local args = {
 game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("MainEvent"):FireServer(unpack(args))
 
 end)
-
-
-
-
-
