@@ -35,13 +35,13 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptfree/MannyHub/m
 <tbody>
 <tr>
 <td>Superhero Tycoon</td>
-<td>🟢Working, Not buggy, Undetected</td>
+<td>Working, Not buggy, Undetected</td>
 <td>7/26/2024</td>
 <td>7/26/2024</td>
 </tr>
 <tr>
 <td>Blob Eating Simulator</td>
-<td>🟢Working, Buggy, Undetected</td>
+<td>Working, Buggy, Undetected</td>
 <td>7/26/2024</td>
 <td>7/26/2024</td>
 </tr>
