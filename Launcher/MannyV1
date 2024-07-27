@@ -14,7 +14,7 @@
      \/__/         \/__/         \/__/         \/__/                                \/__/         \/__/         ~~       
 
 
---]]
+]]--
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "BlackRectangleUI"
