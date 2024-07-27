@@ -1,1 +1,70 @@
+--[
 
+THIS IS NOT THE OFFICIAL MANNY HUB LOADER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]--
+
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "HEY!";
+                Text = "This is not the official Manny Hub script!";
+                Duration = 5;})
+
+
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))() 
+local Window = Library.CreateLib("Manny Hub Developer", "BloodTheme") 
+
+
+local Tab1 = Window:NewTab("Main")
+local Tab1Section = Tab1:NewSection("Configs")
+
+
+
+
+Tab1Section:NewButton("Infinite Yield", ".", function()
+
+loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+
+end)
+
+Tab1Section:NewButton("Simple Spy", ".", function()
+
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"))()
+
+end)
+
+Tab1Section:NewButton("Dark Dex V3", ".", function()
+
+loadstring(game:HttpGetAsync("https://pastebin.com/raw/3V6sh6Yk"))()
+
+end)
+
+Tab1Section:NewToggle("Walkspeed", ".", function(t)
+getgenv().FLO = t
+while getgenv().FLO and wait(0.01) do
+
+
+
+end
+end)
