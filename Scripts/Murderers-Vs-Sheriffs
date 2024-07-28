@@ -21,7 +21,7 @@ local function createOutline(player)
     if not player.Character then return end
 
     for _, part in ipairs(player.Character:GetChildren()) do
-        if part:IsA("BasePart") then
+        if part:IsA("BasePart") and not part:FindFirstChild("HighlightOutline") then
             local adornment = Instance.new("BoxHandleAdornment")
             adornment.Name = "HighlightOutline"
             adornment.Adornee = part
@@ -40,10 +40,9 @@ local function removeHighlights(player)
     if player.Character then
         for _, part in ipairs(player.Character:GetChildren()) do
             if part:IsA("BasePart") then
-                for _, child in ipairs(part:GetChildren()) do
-                    if child:IsA("BoxHandleAdornment") and child.Name == "HighlightOutline" then
-                        child:Destroy()
-                    end
+                local highlight = part:FindFirstChild("HighlightOutline")
+                if highlight then
+                    highlight:Destroy()
                 end
             end
         end
