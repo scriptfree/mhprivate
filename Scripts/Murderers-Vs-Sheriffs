@@ -29,7 +29,7 @@ local function createOutline(player)
             adornment.ZIndex = 10
             adornment.Size = part.Size + Vector3.new(0.1, 0.1, 0.1) -- Slightly larger to wrap around
             adornment.Color3 = HighlightColor
-            adornment.Transparency = 0.5
+            adornment.Transparency = 0.8 -- Increased transparency to make it less intrusive
             adornment.Parent = part
         end
     end
