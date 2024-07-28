@@ -1,12 +1,11 @@
 
 local Games = {
-[137885680] = "https://raw.githubusercontent.com/dogefriendyt/Doge-Hub/main/scripts/Zombie%20Rush",
-[4301323950] = "https://raw.githubusercontent.com/dogefriendyt/Doge-Hub/main/scripts/Zombie%20Rush",
 [574407221] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Superhero-Tycoon",
 [8200787440] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Blob-Eating-Simulator",
 [4806026225] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Defenders-Depot",
 [142823291] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Murder-Mystery-2",
 [3056526277] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Build-And-Survive",
+[12355337193] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Murderers-Vs-Sheriffs-Duels",
 }
 
 if Games[game.PlaceId] then
