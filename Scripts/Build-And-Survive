@@ -165,7 +165,7 @@ end)
 
 Tab1Section:NewButton("Teleport to safe spot", ".", function()
 
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-39.513980865478516, 262.00732421875, 422.0516052246094)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-69.97835540771484, 96.49999237060547, -259.39923095703125)
 
 end)
 
