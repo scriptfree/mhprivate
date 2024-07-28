@@ -11,6 +11,33 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Reference to the workspace and the CratesCache folder
+local cratesCacheFolder = workspace:WaitForChild("CratesCache")
+
+-- Function to teleport all items in the CratesCache folder to the player's character
+local function teleportCratesToPlayer()
+    local crates = cratesCacheFolder:GetChildren()
+    
+    for _, crate in ipairs(crates) do
+        if crate:IsA("BasePart") then
+            crate.CFrame = rootPart.CFrame
+            crate.CanCollide = false
+        elseif crate:IsA("Model") and crate.PrimaryPart then
+            local offset = crate.PrimaryPart.CFrame - crate.PrimaryPart.Position
+            crate:SetPrimaryPartCFrame(rootPart.CFrame * offset)
+            for _, part in ipairs(crate:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end
+
 local args = {
     [1] = 1, --1 - 10
     [2] = "Power",
@@ -34,6 +61,16 @@ Tab1Section:NewButton("Get all gears", ".", function()
 
 updateArgsAndInvoke()
 
+end)
+
+Tab1Section:NewToggle("Bring all crates", ".", function(t)
+    getgenv().FLO = t
+    spawn(function()
+        while getgenv().FLO do
+            teleportCratesToPlayer()
+            wait(0.05) -- Adjust the wait time as needed
+        end
+    end)
 end)
 
 Tab1Section:NewToggle("Auto collect cash", ".", function(t)
