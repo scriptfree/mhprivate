@@ -2,7 +2,7 @@
 
 # Manny Hub
 
-Manny Hub has a small variety of scripts for games all made by me and chatgpt.
+Manny Hub has a small variety of scripts for games with fun features to use!
 
 Created: _7/26/2024_
 <br>
