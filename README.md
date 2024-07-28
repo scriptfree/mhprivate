@@ -38,7 +38,7 @@ For a more information about the scripts join the discord below.
 <td>Superhero Tycoon</td>
 <td>Working, Not buggy, Undetected</td>
 <td>7/26/2024</td>
-<td>7/26/2024</td>
+<td>7/28/2024</td>
 </tr>
 <tr>
 <td>Blob Eating Simulator</td>
