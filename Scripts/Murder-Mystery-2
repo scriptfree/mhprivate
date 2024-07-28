@@ -11,6 +11,34 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
+local collectedCoins = {}
+
+-- Function to teleport the player slightly above each "Coin_Server" part
+local function teleportToCoins()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+
+    local coins = workspace:GetDescendants()
+    local foundCoin = false
+
+    for _, item in ipairs(coins) do
+        if item:IsA("BasePart") and item.Name == "Coin_Server" and not collectedCoins[item] then
+            rootPart.CFrame = item.CFrame + Vector3.new(0, 3, 0) -- Teleport 3 units above the coin
+            collectedCoins[item] = true -- Mark this coin as collected
+            foundCoin = true
+            -- Wait until the coin is touched (simple simulation with a delay)
+            wait(0.5) -- Simulate the time it takes to touch the coin
+            break
+        end
+    end
+
+    -- If a Coin_Server is found and touched, teleport back to the specified coordinates
+    if foundCoin then
+        rootPart.CFrame = CFrame.new(-95.58431243896484, 152.73521423339844, 105.27819061279297)
+    end
+end
+
 local toolName = "Gun"
 
 -- Function to find the tool in players' inventories
@@ -152,7 +180,15 @@ Tab1Section:NewToggle("ESP", ".", function(t)
     end
 end)
 
-
+Tab1Section:NewToggle("Autofarm coins", ".", function(t)
+    getgenv().FLO = t
+    spawn(function()
+        while getgenv().FLO do
+            teleportToCoins()
+            wait(2) -- Wait time to ensure the loop doesn't run too quickly
+        end
+    end)
+end)
 
 Tab1Section:NewButton("Teleport to gun", ".", function()
 
