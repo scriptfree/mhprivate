@@ -63,7 +63,7 @@ Tab1Section:NewToggle("Bring all crates", ".", function(t)
                 end
             end
 
-            wait(0.05) -- Adjust the wait time as needed
+            wait(0.1) -- Adjust the wait time as needed
         end
     end)
 end)
