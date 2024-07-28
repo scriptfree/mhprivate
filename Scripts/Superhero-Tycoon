@@ -15,29 +15,6 @@ local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local rootPart = character:WaitForChild("HumanoidRootPart")
 
--- Reference to the workspace and the CratesCache folder
-local cratesCacheFolder = workspace:WaitForChild("CratesCache")
-
--- Function to teleport all items in the CratesCache folder to the player's character
-local function teleportCratesToPlayer()
-    local crates = cratesCacheFolder:GetChildren()
-    
-    for _, crate in ipairs(crates) do
-        if crate:IsA("BasePart") then
-            crate.CFrame = rootPart.CFrame
-            crate.CanCollide = false
-        elseif crate:IsA("Model") and crate.PrimaryPart then
-            local offset = crate.PrimaryPart.CFrame - crate.PrimaryPart.Position
-            crate:SetPrimaryPartCFrame(rootPart.CFrame * offset)
-            for _, part in ipairs(crate:GetChildren()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-        end
-    end
-end
-
 local args = {
     [1] = 1, --1 - 10
     [2] = "Power",
@@ -67,7 +44,25 @@ Tab1Section:NewToggle("Bring all crates", ".", function(t)
     getgenv().FLO = t
     spawn(function()
         while getgenv().FLO do
-            teleportCratesToPlayer()
+            local player = game.Players.LocalPlayer
+            local rootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+
+            if rootPart then
+                for _, crate in ipairs(workspace:WaitForChild("CratesCache"):GetChildren()) do
+                    if crate:IsA("BasePart") then
+                        crate.CFrame = rootPart.CFrame
+                        crate.CanCollide = false
+                    elseif crate:IsA("Model") and crate.PrimaryPart then
+                        crate:SetPrimaryPartCFrame(rootPart.CFrame)
+                        for _, part in ipairs(crate:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                part.CanCollide = false
+                            end
+                        end
+                    end
+                end
+            end
+
             wait(0.05) -- Adjust the wait time as needed
         end
     end)
