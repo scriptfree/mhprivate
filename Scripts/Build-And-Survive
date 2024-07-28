@@ -11,6 +11,33 @@ local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Stuff")
 
 
+local thingsFolderPath = "__THINGS"
+local monstersFolderPath = "Monsters"
+local flingForceVector = Vector3.new(1000, 500, 1000) -- Adjust the values to control the fling direction and force
+
+-- Function to fling and spin all monsters in the Monsters folder out of the map
+local function flingAndSpinMonsters()
+    local thingsFolder = workspace:WaitForChild(thingsFolderPath)
+    local monstersFolder = thingsFolder:WaitForChild(monstersFolderPath)
+    local monsterList = monstersFolder:GetChildren()
+
+    for _, monsterModel in ipairs(monsterList) do
+        if monsterModel:IsA("Model") and monsterModel:FindFirstChild("Humanoid") then
+            local primaryPart = monsterModel.PrimaryPart or monsterModel:FindFirstChildWhichIsA("BasePart")
+            if primaryPart then
+                -- Set a large angular velocity to spin the monster
+                local bodyAngularVelocity = Instance.new("BodyAngularVelocity")
+                bodyAngularVelocity.AngularVelocity = Vector3.new(0, 500, 0)
+                bodyAngularVelocity.MaxTorque = Vector3.new(100000, 100000, 100000)
+                bodyAngularVelocity.Parent = primaryPart
+
+                -- Set a large horizontal velocity to fling the monster out of the map
+                primaryPart.Velocity = flingForceVector
+            end
+        end
+    end
+end
+
 local thingsFolderName = "__THINGS"
 local monstersFolderName = "Monsters"
 
@@ -112,13 +139,13 @@ Tab1Section:NewToggle("Bring all loot", ".", function(t)
     end
 end)
 
-Tab1Section:NewToggle("KILL ALL MONSTERS", ".", function(t)
+Tab1Section:NewToggle("Fling monsters", ".", function(t)
     getgenv().FLO = t
     while getgenv().FLO do
 
-        killAllMonsters()
+         flingAndSpinMonsters()
 
-        wait(0.05)
+        wait(0.2)
     end
 end)
 
