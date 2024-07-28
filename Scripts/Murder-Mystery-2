@@ -39,46 +39,8 @@ local function teleportToCoins()
     end
 end
 
-local toolName = "Gun"
 
--- Function to find the tool in players' inventories
-local function findToolInPlayers()
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Backpack:FindFirstChild(toolName) or (player.Character and player.Character:FindFirstChild(toolName)) then
-            return true
-        end
-    end
-    return false
-end
 
--- Function to find the dropped tool in the workspace
-local function findDroppedTool()
-    for _, tool in pairs(workspace:GetDescendants()) do
-        if tool:IsA("Tool") and tool.Name == toolName then
-            return tool
-        end
-    end
-    return nil
-end
-
--- Main function to check for the tool and teleport
-local function checkAndTeleport()
-    if not findToolInPlayers() then
-        local droppedTool = findDroppedTool()
-        if droppedTool then
-            local player = game.Players.LocalPlayer
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = droppedTool.Handle.CFrame
-            end
-        else
-            print("Gun tool is not found in any inventory or dropped in the workspace.")
-        end
-    else
-        print("Gun tool is found in a player's inventory.")
-    end
-end
-
--- Function to create or update a highlight around a player
 local function updateHighlight(player)
     -- Check if the player has a character
     if player.Character then
@@ -118,18 +80,20 @@ local function updateHighlight(player)
     end
 end
 
+-- Function to remove highlights from a specific player
+local function removeHighlight(player)
+    if player.Character then
+        local highlight = player.Character:FindFirstChild("Highlight")
+        if highlight then
+            highlight:Destroy()
+        end
+    end
+end
+
 -- Function to remove highlights from all players
 local function removeAllHighlights()
     for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Character then
-            local highlight = player.Character:FindFirstChild("Highlight")
-            local hasKnife = player.Backpack:FindFirstChild("Knife") or (player.Character and player.Character:FindFirstChild("Knife"))
-            local hasGun = player.Backpack:FindFirstChild("Gun") or (player.Character and player.Character:FindFirstChild("Gun"))
-            
-            if highlight and not hasKnife and not hasGun then
-                highlight:Destroy()
-            end
-        end
+        removeHighlight(player)
     end
 end
 
@@ -142,17 +106,32 @@ end
 
 -- Function to set up event listeners for a player
 local function setupPlayer(player)
-    -- Wait for the character to be added
     player.CharacterAdded:Connect(function()
-        -- Add/update the highlight for the new player's character
-        updateHighlight(player)
+        -- Delay to ensure player's tools have loaded
+        wait(1)
+        
+        if getgenv().FLO then
+            -- Add/update the highlight for the new player's character
+            updateHighlight(player)
+        else
+            -- Remove the highlight if the toggle is off
+            removeHighlight(player)
+        end
         
         -- Update highlight if the player's backpack changes
         player.Backpack.ChildAdded:Connect(function()
-            updateHighlight(player)
+            if getgenv().FLO then
+                updateHighlight(player)
+            else
+                removeHighlight(player)
+            end
         end)
         player.Backpack.ChildRemoved:Connect(function()
-            updateHighlight(player)
+            if getgenv().FLO then
+                updateHighlight(player)
+            else
+                removeHighlight(player)
+            end
         end)
     end)
 end
@@ -192,6 +171,6 @@ end)
 
 Tab1Section:NewButton("Teleport to gun", ".", function()
 
-checkAndTeleport()
+print("Coming soon!")
 
 end)
