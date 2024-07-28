@@ -62,6 +62,12 @@ For a more information about the scripts join the discord below.
 <td>Murderers Vs Sheriffs Duels</td>
 <td>Working, Not buggy, Undetected</td>
 <td>7/27/2024</td>
+<td>7/28/2024</td>
+</tr>
+<tr>
+<td>Murderers Vs Sheriffs Duels</td>
+<td>Working, Not buggy, Undetected</td>
+<td>7/27/2024</td>
 <td>7/27/2024</td>
 </tr>
 </tbody>
