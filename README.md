@@ -80,3 +80,8 @@ For a more information about the scripts join the discord below.
 ```
 https://discord.gg/7wKHbPgKQd
 ```
+
+# Credits
+
+1. Me
+2. ChatGPT
