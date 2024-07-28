@@ -11,6 +11,47 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
+local function teleportToGunDropAndBack()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- Find the Normal object and then the GunDrop part inside it
+    local normalFolder = workspace:FindFirstChild("Normal")
+    if normalFolder then
+        local gunDrop = normalFolder:FindFirstChild("GunDrop")
+
+        if gunDrop then
+            -- Save the player's current position
+            local savedPosition = rootPart.CFrame
+
+            -- Teleport to the GunDrop part
+            rootPart.CFrame = gunDrop.CFrame + Vector3.new(0, 3, 0) -- Teleport 3 units above the GunDrop part
+
+            -- Wait for a brief moment to ensure the teleport is registered
+            wait(0.5) -- Adjust the wait time as needed
+
+            -- Teleport back to the saved position
+            rootPart.CFrame = savedPosition
+        else
+            -- Display a notification if the GunDrop part is not found
+            game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Notification";
+                Text = "The gun has not been dropped yet.";
+                Duration = 2;
+            })
+        end
+    else
+        -- Display a notification if the Normal folder is not found
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title = "Notification";
+            Text = "The Normal folder is not found in the workspace.";
+            Duration = 2;
+        })
+    end
+end
+
+
 local collectedCoins = {}
 
 -- Function to teleport the player slightly above each "Coin_Server" part
@@ -171,6 +212,6 @@ end)
 
 Tab1Section:NewButton("Teleport to gun", ".", function()
 
-print("Coming soon!")
+teleportToGunDropAndBack()
 
 end)
