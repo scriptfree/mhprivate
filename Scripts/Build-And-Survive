@@ -11,13 +11,32 @@ local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Stuff")
 
 
-local function killAllInThingsFolder()
-    local thingsFolder = workspace:WaitForChild("__THINGS")
-    local items = thingsFolder:GetChildren()
+local thingsFolderName = "__THINGS"
+local monstersFolderName = "Monsters"
 
-    for _, item in ipairs(items) do
-        if item:IsA("Model") and item:FindFirstChild("Humanoid") then
-            item.Humanoid.Health = 0
+-- Function to kill all monsters in the Monsters folder
+local function killAllMonsters()
+    local thingsFolder = workspace:WaitForChild(thingsFolderName)
+    local monstersFolder = thingsFolder:WaitForChild(monstersFolderName)
+    local monsters = monstersFolder:GetChildren()
+
+    for _, monster in ipairs(monsters) do
+        if monster:IsA("Model") and monster:FindFirstChild("Humanoid") then
+            -- Set health to 0
+            monster.Humanoid.Health = 0
+
+            -- Break joints
+            monster:BreakJoints()
+
+            -- Ensure they are dead
+            local connection
+            connection = monster.Humanoid.Died:Connect(function()
+                connection:Disconnect()
+            end)
+            while monster.Humanoid.Health > 0 do
+                monster.Humanoid.Health = 0
+                wait(0.1)
+            end
         end
     end
 end
@@ -93,11 +112,13 @@ Tab1Section:NewToggle("Bring all loot", ".", function(t)
     end
 end)
 
-Tab1Section:NewToggle("Kill all monsters", ".", function(t)
-    getgenv().KILL_TOGGLE = t
-    while getgenv().KILL_TOGGLE do
-        killAllInThingsFolder()
-        wait(0.05) -- Adjust the interval as needed
+Tab1Section:NewToggle("KILL ALL MONSTERS", ".", function(t)
+    getgenv().FLO = t
+    while getgenv().FLO do
+
+        killAllMonsters()
+
+        wait(0.05)
     end
 end)
 
