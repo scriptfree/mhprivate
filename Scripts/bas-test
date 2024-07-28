@@ -10,34 +10,31 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
-local x = -252
-local y = -8 -- starting floor is -8
-local z = 48 -- Change this (by increments of 4) to change where the location of the wall is
-local amount = 15
-local waitTime = 0.01
+local thingsFolderName = "__THINGS"
+local monstersFolderName = "Monsters"
 
--- Define necessary variables
-local function define()
-    local plr = game:GetService('Players').LocalPlayer
-    local root = plr.Character.HumanoidRootPart
-    return plr, root
-end
+-- Function to kill all monsters in the Monsters folder
+local function killAllMonsters()
+    local thingsFolder = workspace:WaitForChild(thingsFolderName)
+    local monstersFolder = thingsFolder:WaitForChild(monstersFolderName)
+    local monsters = monstersFolder:GetChildren()
 
--- Wait until the game is ready and define variables
-print('loading')
-local success, plr, root
-repeat
-    success, plr, root = pcall(define)
-    wait()
-until success
+    for _, monster in ipairs(monsters) do
+        if monster:IsA("Model") and monster:FindFirstChild("Humanoid") then
+            -- Set health to 0
+            monster.Humanoid.Health = 0
 
--- Function to kill monsters past the loot drop point
-local function killMonsters()
-    for _, monster in ipairs(workspace.Monsters:GetChildren()) do
-        if monster:IsA("Model") and monster:FindFirstChild("HumanoidRootPart") then
-            local monsterPos = monster.HumanoidRootPart.Position
-            if monsterPos.X > x and monsterPos.Y > y and monsterPos.Z > z then
-                monster:Destroy()
+            -- Break joints
+            monster:BreakJoints()
+
+            -- Ensure they are dead
+            local connection
+            connection = monster.Humanoid.Died:Connect(function()
+                connection:Disconnect()
+            end)
+            while monster.Humanoid.Health > 0 do
+                monster.Humanoid.Health = 0
+                wait(0.1)
             end
         end
     end
@@ -46,7 +43,9 @@ end
 Tab1Section:NewToggle("KILL ALL MONSTERS", ".", function(t)
     getgenv().FLO = t
     while getgenv().FLO do
-        killMonsters()
-        wait(waitTime)
+
+        killAllMonsters()
+
+        wait(0.5)
     end
 end)
