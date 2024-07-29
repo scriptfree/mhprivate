@@ -51,3 +51,17 @@ game:GetService("ReplicatedStorage"):WaitForChild("Request Deploy"):InvokeServer
         end
     end)
 end)
+
+Tab1Section:NewButton("Buy early access case", ".", function()
+
+local args = {
+    [1] = "Early Access Case",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Purchase Case Quantity"):InvokeServer(unpack(args))
+
+
+end)
+
+
