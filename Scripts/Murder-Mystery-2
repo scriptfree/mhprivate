@@ -256,11 +256,52 @@ Tab1Section:NewButton("Teleport to Knife Holder", ".", function()
     end
 end)
 
-Tab1Section:NewButton("Teleport to murderer", ".", function()
+Tab1Section:NewButton("Teleport to Knife Holder", ".", function()
+    local Players = game:GetService("Players")
+    local localPlayer = Players.LocalPlayer
+    local character = localPlayer.Character
+    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
 
-teleportToKnifeHolder()
+    if not humanoidRootPart then return end
 
+    -- Find the player with the "Knife" tool or gear
+    local function findPlayerWithKnife()
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                local backpack = player:FindFirstChildOfClass("Backpack")
+                if backpack then
+                    for _, tool in ipairs(backpack:GetChildren()) do
+                        if tool.Name == "Knife" then
+                            return player
+                        end
+                    end
+                end
+                
+                -- Also check if the Knife is equipped
+                local character = player.Character
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    if humanoid and humanoid:FindFirstChild("Knife") then
+                        return player
+                    end
+                end
+            end
+        end
+        return nil
+    end
+
+    local targetPlayer = findPlayerWithKnife()
+    if targetPlayer and targetPlayer.Character then
+        local targetHumanoidRootPart = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if targetHumanoidRootPart then
+            local targetPosition = targetHumanoidRootPart.Position
+            -- Teleport behind the player with some distance to avoid dying
+            local offset = Vector3.new(-5, 0, 0) -- Adjust this offset as needed
+            humanoidRootPart.Position = targetPosition + offset
+        end
+    end
 end)
+
 
 Tab1Section:NewSlider("Speed Changer", "Walkspeed", 100, 16, function(ws)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
