@@ -1,7 +1,7 @@
 
 local Games = {
 [574407221] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Superhero-Tycoon",
-[8200787440] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Blob-Eating-Simulator",
+[17240213780] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Blob-Eating-Simulator",
 [4806026225] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Defenders-Depot",
 [142823291] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Murder-Mystery-2",
 [3056526277] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Build-And-Survive",
