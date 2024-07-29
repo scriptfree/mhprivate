@@ -215,3 +215,10 @@ Tab1Section:NewButton("Teleport to gun", ".", function()
 teleportToGunDropAndBack()
 
 end)
+
+Tab1Section:NewButton("Anti AFK", ".", function()
+
+for a,b in pairs(getconnections(game.Players.LocalPlayer.Idled))do b:Disable()end
+warn("anti afk loaded")
+
+end)
