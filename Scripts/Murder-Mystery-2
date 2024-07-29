@@ -210,58 +210,6 @@ Tab1Section:NewToggle("Autofarm coins", ".", function(t)
     end)
 end)
 
-Tab1Section:NewButton("Teleport to murderer", ".", function()
-    local Players = game:GetService("Players")
-    local localPlayer = Players.LocalPlayer
-    
-    -- Function to find the player with the Knife
-    local function findPlayerWithKnife()
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= localPlayer then
-                local character = player.Character
-                local backpack = player:FindFirstChildOfClass("Backpack")
-                if backpack then
-                    for _, item in ipairs(backpack:GetChildren()) do
-                        if item.Name == "Knife" then
-                            return player
-                        end
-                    end
-                end
-                
-                if character then
-                    local humanoid = character:FindFirstChildOfClass("Humanoid")
-                    if humanoid and humanoid:FindFirstChild("Knife") then
-                        return player
-                    end
-                end
-            end
-        end
-        return nil
-    end
-
-    local function teleportBehind(player)
-        local character = localPlayer.Character
-        local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-        
-        if not humanoidRootPart then return end
-        
-        local targetCharacter = player.Character
-        if targetCharacter then
-            local targetHumanoidRootPart = targetCharacter:FindFirstChild("HumanoidRootPart")
-            if targetHumanoidRootPart then
-                local targetPosition = targetHumanoidRootPart.Position
-                local direction = (targetHumanoidRootPart.Position - humanoidRootPart.Position).Unit
-                local offset = -5 -- Distance behind the player
-                humanoidRootPart.Position = targetPosition - direction * offset
-            end
-        end
-    end
-
-    local knifeHolder = findPlayerWithKnife()
-    if knifeHolder then
-        teleportBehind(knifeHolder)
-    end
-end)
 
 
 Tab1Section:NewButton("Teleport to gun", ".", function()
