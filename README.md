@@ -68,7 +68,7 @@ For a more information about the scripts join the discord below.
 <td>Murder Mystery 2</td>
 <td>Working, Buggy, Undetected</td>
 <td>7/27/2024</td>
-<td>7/28/2024</td>
+<td>7/29/2024</td>
 </tr>
 </tbody>
 </table>
