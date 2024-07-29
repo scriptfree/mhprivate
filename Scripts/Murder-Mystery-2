@@ -11,6 +11,47 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
+local function teleportToKnifeHolder()
+    local knifeHolder = nil
+
+    -- Find player with "Knife" in their inventory or equipped
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        -- Check if Knife is equipped
+        if player.Character and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid:FindFirstChild("Knife") then
+            knifeHolder = player
+            break
+        end
+
+        -- Check if Knife is in backpack
+        if not knifeHolder then
+            for _, tool in ipairs(player.Backpack:GetChildren()) do
+                if tool.Name == "Knife" then
+                    knifeHolder = player
+                    break
+                end
+            end
+        end
+
+        if knifeHolder then
+            break
+        end
+    end
+
+    if knifeHolder then
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") and knifeHolder.Character and knifeHolder.Character:FindFirstChild("HumanoidRootPart") then
+            local knifeHolderPosition = knifeHolder.Character.HumanoidRootPart.Position
+            local knifeHolderLookVector = knifeHolder.Character.HumanoidRootPart.CFrame.LookVector
+            local offset = 5 -- Adjust this value to control the distance behind the knife holder
+
+            -- Teleport to a position directly behind the knife holder
+            character.HumanoidRootPart.CFrame = CFrame.new(knifeHolderPosition - knifeHolderLookVector * offset, knifeHolderPosition)
+        end
+    else
+        print("No player with Knife found.")
+    end
+end
+
 local function teleportToGunDropAndBack()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
@@ -214,6 +255,16 @@ Tab1Section:NewButton("Teleport to gun", ".", function()
 
 teleportToGunDropAndBack()
 
+end)
+
+Tab1Section:NewButton("Teleport to murderer", ".", function()
+
+teleportToKnifeHolder()
+
+end)
+
+Tab1Section:NewSlider("Speed Changer", "Walkspeed", 100, 16, function(ws)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
 end)
 
 Tab1Section:NewButton("Anti AFK", ".", function()
