@@ -70,11 +70,11 @@ redButton.TextScaled = true
 redButton.Parent = blackRectangle
 
 launchButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/MannyHub/main/Launcher/Load/Main"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/main/Launcher/Load/Main"))()
 end)
 
 listButton.MouseButton1Click:Connect(function()
-    setclipboard("https://github.com/scriptfree/MannyHub/tree/main?tab=readme-ov-file#supported-games")
+    setclipboard("https://pastebin.com/HgumhAzb")
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Notification";
         Text = "Link copied to clipboard!";
