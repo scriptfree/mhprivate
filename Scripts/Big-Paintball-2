@@ -1,3 +1,53 @@
---Auto respawn
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Success";
+                Text = "Thanks for using Manny Hub!";
+                Duration = 2;})
 
+
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/GdN5iRbt"))() 
+local Window = Library.CreateLib("Manny Hub", "BloodTheme") 
+
+
+local Tab1 = Window:NewTab("Main")
+local Tab1Section = Tab1:NewSection("Configs")
+
+Tab1Section:NewToggle("Bring all enemies", ".", function(t)
+    getgenv().FLO = t
+    spawn(function()
+        while getgenv().FLO do
+            local player = game.Players.LocalPlayer
+            local team = player.Team
+            local character = player.Character
+            local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+            if humanoidRootPart then
+                for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                    if otherPlayer ~= player and otherPlayer.Team ~= team and otherPlayer.Character then
+                        local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if otherHumanoidRootPart then
+                            -- Calculate the position directly in front of the local player
+                            local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
+                            local newPosition = humanoidRootPart.Position + offset
+
+                            -- Set the position and orientation of the other player's HumanoidRootPart
+                            otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                        end
+                    end
+                end
+            end
+
+            wait(0.1) -- Adjust the wait time as needed
+        end
+    end)
+end)
+
+Tab1Section:NewToggle("Auto respawn", ".", function(t)
+    getgenv().FLO = t
+    spawn(function()
+        while getgenv().FLO do
+            
 game:GetService("ReplicatedStorage"):WaitForChild("Request Deploy"):InvokeServer()
+            wait(0.2) -- Adjust the wait time as needed
+        end
+    end)
+end)
