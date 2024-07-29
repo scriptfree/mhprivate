@@ -264,6 +264,13 @@ Tab1Section:NewButton("Teleport to murderer", ".", function()
 end)
 
 
+Tab1Section:NewButton("Teleport to gun", ".", function()
+
+teleportToGunDropAndBack()
+
+end)
+
+
 
 Tab1Section:NewSlider("Speed Changer", "Walkspeed", 100, 16, function(ws)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
