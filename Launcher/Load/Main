@@ -1,11 +1,11 @@
 
 local Games = {
-[574407221] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Superhero-Tycoon",
-[8200787440] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Blob-Eating-Simulator",
-[4806026225] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Defenders-Depot",
-[142823291] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Murder-Mystery-2",
-[3056526277] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Build-And-Survive",
-[12355337193] = "https://raw.githubusercontent.com/scriptfree/MannyHub/main/Scripts/Murderers-Vs-Sheriffs-Duels",
+[574407221] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Superhero-Tycoon",
+[8200787440] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Blob-Eating-Simulator",
+[4806026225] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Defenders-Depot",
+[142823291] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Murder-Mystery-2",
+[3056526277] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Build-And-Survive",
+[12355337193] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Murderers-Vs-Sheriffs-Duels",
 }
 
 if Games[game.PlaceId] then
