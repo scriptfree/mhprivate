@@ -11,47 +11,6 @@ local Window = Library.CreateLib("Manny Hub", "BloodTheme")
 local Tab1 = Window:NewTab("Main")
 local Tab1Section = Tab1:NewSection("Configs")
 
-local function teleportToKnifeHolder()
-    local knifeHolder = nil
-
-    -- Find player with "Knife" in their inventory or equipped
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        -- Check if Knife is equipped
-        if player.Character and player.Character:FindFirstChildOfClass("Humanoid") and player.Character.Humanoid:FindFirstChild("Knife") then
-            knifeHolder = player
-            break
-        end
-
-        -- Check if Knife is in backpack
-        if not knifeHolder then
-            for _, tool in ipairs(player.Backpack:GetChildren()) do
-                if tool.Name == "Knife" then
-                    knifeHolder = player
-                    break
-                end
-            end
-        end
-
-        if knifeHolder then
-            break
-        end
-    end
-
-    if knifeHolder then
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("HumanoidRootPart") and knifeHolder.Character and knifeHolder.Character:FindFirstChild("HumanoidRootPart") then
-            local knifeHolderPosition = knifeHolder.Character.HumanoidRootPart.Position
-            local knifeHolderLookVector = knifeHolder.Character.HumanoidRootPart.CFrame.LookVector
-            local offset = 5 -- Adjust this value to control the distance behind the knife holder
-
-            -- Teleport to a position directly behind the knife holder
-            character.HumanoidRootPart.CFrame = CFrame.new(knifeHolderPosition - knifeHolderLookVector * offset, knifeHolderPosition)
-        end
-    else
-        print("No player with Knife found.")
-    end
-end
-
 local function teleportToGunDropAndBack()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
@@ -251,10 +210,50 @@ Tab1Section:NewToggle("Autofarm coins", ".", function(t)
     end)
 end)
 
-Tab1Section:NewButton("Teleport to gun", ".", function()
+Tab1Section:NewButton("Teleport to Knife Holder", ".", function()
+    local Players = game:GetService("Players")
+    local localPlayer = Players.LocalPlayer
+    local character = localPlayer.Character
+    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
 
-teleportToGunDropAndBack()
+    if not humanoidRootPart then return end
 
+    -- Find the player with the "Knife" tool or gear
+    local function findPlayerWithKnife()
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                local backpack = player:FindFirstChildOfClass("Backpack")
+                if backpack then
+                    for _, tool in ipairs(backpack:GetChildren()) do
+                        if tool.Name == "Knife" then
+                            return player
+                        end
+                    end
+                end
+                
+                -- Also check if the Knife is equipped
+                local character = player.Character
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    if humanoid and humanoid:FindFirstChild("Knife") then
+                        return player
+                    end
+                end
+            end
+        end
+        return nil
+    end
+
+    local targetPlayer = findPlayerWithKnife()
+    if targetPlayer and targetPlayer.Character then
+        local targetHumanoidRootPart = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if targetHumanoidRootPart then
+            local targetPosition = targetHumanoidRootPart.Position
+            -- Teleport behind the player with some distance to avoid dying
+            local offset = Vector3.new(-5, 0, 0) -- Adjust this offset as needed
+            humanoidRootPart.Position = targetPosition + offset
+        end
+    end
 end)
 
 Tab1Section:NewButton("Teleport to murderer", ".", function()
