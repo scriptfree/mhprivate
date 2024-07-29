@@ -71,7 +71,7 @@ redButton.TextScaled = true
 redButton.Parent = blackRectangle
 
 launchButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/main/Launcher/Main"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/main/Launcher/Load/Main"))()
 end)
 
 listButton.MouseButton1Click:Connect(function()
