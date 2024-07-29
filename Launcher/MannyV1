@@ -16,6 +16,7 @@
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "BlackRectangleUI"
+screenGui.ResetOnSpawn = false  -- Ensure the GUI persists after character reset
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local blackRectangle = Instance.new("Frame")
@@ -70,7 +71,7 @@ redButton.TextScaled = true
 redButton.Parent = blackRectangle
 
 launchButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/main/Launcher/Load/Main"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/main/Launcher/Main"))()
 end)
 
 listButton.MouseButton1Click:Connect(function()
