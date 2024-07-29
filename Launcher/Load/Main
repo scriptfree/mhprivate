@@ -6,6 +6,7 @@ local Games = {
 [142823291] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Murder-Mystery-2",
 [3056526277] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Build-And-Survive",
 [12355337193] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Murderers-Vs-Sheriffs-Duels",
+[9865958871] = "https://raw.githubusercontent.com/scriptfree/mhprivate/main/Scripts/Big-Paintball-2",
 }
 
 if Games[game.PlaceId] then
