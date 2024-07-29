@@ -13,7 +13,8 @@ local Tab1Section = Tab1:NewSection("Configs")
 
 Tab1Section:NewToggle("Bring all enemies", ".", function(t)
     getgenv().FLO = t
-    spawn(function()
+
+    local function bringEnemies()
         while getgenv().FLO do
             local player = game.Players.LocalPlayer
             local team = player.Team
@@ -22,15 +23,18 @@ Tab1Section:NewToggle("Bring all enemies", ".", function(t)
 
             if humanoidRootPart then
                 for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                    if otherPlayer ~= player and otherPlayer.Team ~= team and otherPlayer.Character then
+                    if otherPlayer ~= player and otherPlayer.Character then
+                        local otherTeam = otherPlayer.Team
                         local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
                         if otherHumanoidRootPart then
-                            -- Calculate the position directly in front of the local player
-                            local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
-                            local newPosition = humanoidRootPart.Position + offset
+                            if (team and otherTeam and team ~= otherTeam) or (not team and not otherTeam) then
+                                -- Calculate the position directly in front of the local player
+                                local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
+                                local newPosition = humanoidRootPart.Position + offset
 
-                            -- Set the position and orientation of the other player's HumanoidRootPart
-                            otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                                -- Set the position and orientation of the other player's HumanoidRootPart
+                                otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                            end
                         end
                     end
                 end
@@ -38,8 +42,21 @@ Tab1Section:NewToggle("Bring all enemies", ".", function(t)
 
             wait(0.1) -- Adjust the wait time as needed
         end
+    end
+
+    spawn(function()
+        bringEnemies()
+    end)
+
+    game.Players.PlayerAdded:Connect(function()
+        if getgenv().FLO then
+            spawn(function()
+                bringEnemies()
+            end)
+        end
     end)
 end)
+
 
 Tab1Section:NewToggle("Auto respawn", ".", function(t)
     getgenv().FLO = t
@@ -51,5 +68,4 @@ game:GetService("ReplicatedStorage"):WaitForChild("Request Deploy"):InvokeServer
         end
     end)
 end)
-
 
