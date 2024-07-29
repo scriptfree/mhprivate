@@ -74,7 +74,7 @@ launchButton.MouseButton1Click:Connect(function()
 end)
 
 listButton.MouseButton1Click:Connect(function()
-    setclipboard("https://pastebin.com/HgumhAzb")
+    setclipboard("https://pastebin.com/raw/nemeb1Fh")
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Notification";
         Text = "Link copied to clipboard!";
