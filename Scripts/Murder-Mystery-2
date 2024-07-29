@@ -26,7 +26,7 @@ local function teleportToGunDropAndBack()
             local savedPosition = rootPart.CFrame
 
             -- Teleport to the GunDrop part
-            rootPart.CFrame = gunDrop.CFrame + Vector3.new(0, 3, 0) -- Teleport 3 units above the GunDrop part
+            rootPart.CFrame = gunDrop.CFrame + Vector3.new(0, 2, 0) -- Teleport 3 units above the GunDrop part
 
             -- Wait for a brief moment to ensure the teleport is registered
             wait(0.1) -- Adjust the wait time as needed
