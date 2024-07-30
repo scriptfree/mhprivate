@@ -9,7 +9,7 @@ local window = library:Window("Manny Hub")
 local bringEnemiesToggle = false
 local originalPositions = {}
 
-window:Toggle("Toggle",false,function(t)
+window:Toggle("Brinig all enemies",false,function(t)
     bringEnemiesToggle = t
     getgenv().FLO = t -- Only update the global variable when this specific toggle is used
 
