@@ -13,6 +13,7 @@ local Tab1Section = Tab1:NewSection("Configs")
 
 Tab1Section:NewToggle("Bring all enemies", ".", function(t)
     getgenv().FLO = t
+    local originalPositions = {}
 
     local function bringEnemies()
         while getgenv().FLO do
@@ -28,6 +29,11 @@ Tab1Section:NewToggle("Bring all enemies", ".", function(t)
                         local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
                         if otherHumanoidRootPart then
                             if (team and otherTeam and team ~= otherTeam) or (not team and not otherTeam) then
+                                -- Store the original position if not already stored
+                                if not originalPositions[otherPlayer.UserId] then
+                                    originalPositions[otherPlayer.UserId] = otherHumanoidRootPart.CFrame
+                                end
+
                                 -- Calculate the position directly in front of the local player
                                 local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
                                 local newPosition = humanoidRootPart.Position + offset
@@ -40,21 +46,66 @@ Tab1Section:NewToggle("Bring all enemies", ".", function(t)
                 end
             end
 
-            wait(0.05) -- Adjust the wait time as needed
+            wait(0.1) -- Adjust the wait time as needed
+        end
+
+        -- Return all players to their original positions
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            local originalCFrame = originalPositions[otherPlayer.UserId]
+            if originalCFrame and otherPlayer.Character then
+                local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if otherHumanoidRootPart then
+                    otherHumanoidRootPart.CFrame = originalCFrame
+                end
+            end
+        end
+
+        -- Clear the original positions table
+        originalPositions = {}
+    end
+
+    local function onPlayerAdded(player)
+        if getgenv().FLO then
+            spawn(function()
+                while getgenv().FLO do
+                    local localPlayer = game.Players.LocalPlayer
+                    local localTeam = localPlayer.Team
+                    local character = localPlayer.Character
+                    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+                    if humanoidRootPart and player.Character then
+                        local otherTeam = player.Team
+                        local otherHumanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                        if otherHumanoidRootPart then
+                            if (localTeam and otherTeam and localTeam ~= otherTeam) or (not localTeam and not otherTeam) then
+                                -- Store the original position if not already stored
+                                if not originalPositions[player.UserId] then
+                                    originalPositions[player.UserId] = otherHumanoidRootPart.CFrame
+                                end
+
+                                -- Calculate the position directly in front of the local player
+                                local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
+                                local newPosition = humanoidRootPart.Position + offset
+
+                                -- Set the position and orientation of the other player's HumanoidRootPart
+                                otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                            end
+                        end
+                    end
+
+                    wait(0.1) -- Adjust the wait time as needed
+                end
+            end)
         end
     end
 
-    spawn(function()
-        bringEnemies()
-    end)
+    if getgenv().FLO then
+        spawn(function()
+            bringEnemies()
+        end)
+    end
 
-    game.Players.PlayerAdded:Connect(function()
-        if getgenv().FLO then
-            spawn(function()
-                bringEnemies()
-            end)
-        end
-    end)
+    game.Players.PlayerAdded:Connect(onPlayerAdded)
 end)
 
 
