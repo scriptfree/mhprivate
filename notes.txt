@@ -1,18 +1,128 @@
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Success";
+                Text = "Thanks for using Manny Hub!";
+                Duration = 2;})
+
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/3aze/LTS/main/lib/turtle.lua"))()
 local window = library:Window("Manny Hub")
 
+local bringEnemiesToggle = false
+local originalPositions = {}
+
 window:Toggle("Toggle",false,function(t)
-    print(t)
+    bringEnemiesToggle = t
+    getgenv().FLO = t -- Only update the global variable when this specific toggle is used
+
+    local function bringEnemies()
+        while bringEnemiesToggle do
+            local player = game.Players.LocalPlayer
+            local team = player.Team
+            local character = player.Character
+            local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+            if humanoidRootPart then
+                for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                    if otherPlayer ~= player and otherPlayer.Character then
+                        local otherTeam = otherPlayer.Team
+                        local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if otherHumanoidRootPart then
+                            if (team and otherTeam and team ~= otherTeam) or (not team and not otherTeam) then
+                                -- Store the original position if not already stored
+                                if not originalPositions[otherPlayer.UserId] then
+                                    originalPositions[otherPlayer.UserId] = otherHumanoidRootPart.CFrame
+                                end
+
+                                -- Calculate the position directly in front of the local player
+                                local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
+                                local newPosition = humanoidRootPart.Position + offset
+
+                                -- Set the position and orientation of the other player's HumanoidRootPart
+                                otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                            end
+                        end
+                    end
+                end
+            end
+
+            wait(0.1) -- Adjust the wait time as needed
+        end
+
+        -- Return all players to their original positions
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            local originalCFrame = originalPositions[otherPlayer.UserId]
+            if originalCFrame and otherPlayer.Character then
+                local otherHumanoidRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if otherHumanoidRootPart then
+                    otherHumanoidRootPart.CFrame = originalCFrame
+                end
+            end
+        end
+
+        -- Clear the original positions table
+        originalPositions = {}
+    end
+
+    local function onPlayerAdded(player)
+        spawn(function()
+            while bringEnemiesToggle do
+                local localPlayer = game.Players.LocalPlayer
+                local localTeam = localPlayer.Team
+                local character = localPlayer.Character
+                local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+                if humanoidRootPart and player.Character then
+                    local otherTeam = player.Team
+                    local otherHumanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                    if otherHumanoidRootPart then
+                        if (localTeam and otherTeam and localTeam ~= otherTeam) or (not localTeam and not otherTeam) then
+                            -- Store the original position if not already stored
+                            if not originalPositions[player.UserId] then
+                                originalPositions[player.UserId] = otherHumanoidRootPart.CFrame
+                            end
+
+                            -- Calculate the position directly in front of the local player
+                            local offset = humanoidRootPart.CFrame.LookVector * 10 -- Adjust the distance if needed
+                            local newPosition = humanoidRootPart.Position + offset
+
+                            -- Set the position and orientation of the other player's HumanoidRootPart
+                            otherHumanoidRootPart.CFrame = CFrame.new(newPosition, humanoidRootPart.Position)
+                        end
+                    end
+                end
+
+                wait(0.1) -- Adjust the wait time as needed
+            end
+        end)
+    end
+
+    if bringEnemiesToggle then
+        spawn(function()
+            bringEnemies()
+        end)
+    end
+
+    game.Players.PlayerAdded:Connect(onPlayerAdded)
 end)
 
-window:Slider("Slider",0,100,20,function(t)
-   print(t)
+
+window:Toggle("Auto respawn", false, function(t)
+    getgenv().FLO = t
+    spawn(function()
+        while getgenv().FLO do
+            
+game:GetService("ReplicatedStorage"):WaitForChild("Request Deploy"):InvokeServer()
+            wait(0.2) -- Adjust the wait time as needed
+        end
+    end)
 end)
 
-window:Dropdown("Dropdown",{"1","2"},function(t)
-   print(t)
-end)
 
-window:Box("Textbox",function(t)
-   print(t)
+
+
+
+
+window:Slider("Walkspeed",16,100,20,function(t)
+
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+
 end)
