@@ -74,7 +74,7 @@ For a more information about the scripts join the discord below.
 <td>Big Paintball 2</td>
 <td>Working, Not buggy, Undetected</td>
 <td>7/29/2024</td>
-<td>7/29/2024</td>
+<td>7/30/2024</td>
 </tr>
 </tbody>
 </table>
