@@ -4,6 +4,47 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
                 Duration = 2;})
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/3aze/LTS/main/lib/turtle.lua"))()
 local window = library:Window("Manny Hub")
+
+local function teleportToGunDropAndBack()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- Find the Normal object and then the GunDrop part inside it
+    local normalFolder = workspace:FindFirstChild("Normal")
+    if normalFolder then
+        local gunDrop = normalFolder:FindFirstChild("GunDrop")
+
+        if gunDrop then
+            -- Save the player's current position
+            local savedPosition = rootPart.CFrame
+
+            -- Teleport to the GunDrop part
+            rootPart.CFrame = gunDrop.CFrame + Vector3.new(0, 2, 0) -- Teleport 3 units above the GunDrop part
+
+            -- Wait for a brief moment to ensure the teleport is registered
+            wait(0.1) -- Adjust the wait time as needed
+
+            -- Teleport back to the saved position
+            rootPart.CFrame = savedPosition
+        else
+            -- Display a notification if the GunDrop part is not found
+            game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "Notification";
+                Text = "The gun has not been dropped yet.";
+                Duration = 2;
+            })
+        end
+    else
+        -- Display a notification if the Normal folder is not found
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title = "Notification";
+            Text = "The Normal folder is not found in the workspace.";
+            Duration = 2;
+        })
+    end
+end
+
 local bringEnemiesToggle = false
 local originalPositions = {}
 
@@ -89,16 +130,15 @@ window:Toggle("Brinig all enemies",false,function(t)
     end
     game.Players.PlayerAdded:Connect(onPlayerAdded)
 end)
-window:Toggle("Auto respawn", false, function(t)
-    getgenv().FLO = t
-    spawn(function()
-        while getgenv().FLO do
-            
-game:GetService("ReplicatedStorage"):WaitForChild("Request Deploy"):InvokeServer()
-            wait(0.2) -- Adjust the wait time as needed
-        end
-    end)
+
+window:Button("Teleport to gun", function()
+teleportToGunDropAndBack()
 end)
-window:Slider("Walkspeed",16,100,20,function(t)
+
+
+window:Slider("Walkspeed",16,30,16,function(t)
+while true do
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+wait(0.1)
+end
 end)
