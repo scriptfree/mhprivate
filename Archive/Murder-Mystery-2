@@ -166,7 +166,7 @@ end)
 local bringEnemiesToggle = false
 local originalPositions = {}
 
-window:Toggle("Brinig all enemies",false,function(t)
+window:Toggle("Bring all enemies",false,function(t)
     bringEnemiesToggle = t
     getgenv().FLO = t -- Only update the global variable when this specific toggle is used
 
