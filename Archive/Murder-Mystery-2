@@ -252,10 +252,12 @@ window:Button("Teleport to gun", function()
 teleportToGunDropAndBack()
 end)
 
+window:Button("Teleport to lobby", function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-109.75447082519531, 154.662109375, 9.228076934814453)
+end)
 
 window:Slider("Walkspeed",16,30,16,function(t)
-while true do
+
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
-wait(0.1)
-end
+
 end)
