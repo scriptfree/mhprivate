@@ -220,7 +220,7 @@ end)
 
 
 
-Tab1Section:NewSlider("Speed Changer", "Walkspeed", 100, 16, function(ws)
+Tab1Section:NewSlider("Speed Changer", "Walkspeed", 20, 16, function(ws)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
 end)
 
