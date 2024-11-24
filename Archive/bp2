@@ -8,6 +8,7 @@ local bringEnemiesToggle = false
 local originalPositions = {}
 
 local Players = game:GetService("Players")
+local running = false -- State to control the loop
 
 -- Function to remove ForceFields from all players
 local function removeForceFields()
@@ -20,6 +21,20 @@ local function removeForceFields()
             end
         end
     end
+end
+
+-- Function to start the loop
+local function startLoop()
+    running = true
+    while running do
+        removeForceFields()
+        wait(1) -- Adjust the interval as needed
+    end
+end
+
+-- Function to stop the loop
+local function stopLoop()
+    running = false
 end
 
 
@@ -104,6 +119,7 @@ window:Toggle("Brinig all enemies",false,function(t)
     end
     game.Players.PlayerAdded:Connect(onPlayerAdded)
 end)
+
 window:Toggle("Auto respawn", false, function(t)
     getgenv().FLO = t
     spawn(function()
@@ -117,21 +133,14 @@ end)
 
 window:Toggle("Remove ForceFields", true, function(bool)
     if bool then
-        print("Removing ForceFields...") -- Print when toggle is on
-        removeForceFields() -- Remove all ForceFields when enabled
-        -- Optionally, you can also use a loop or event handler to monitor and remove new ForceFields
-        Players.PlayerAdded:Connect(function(player)
-            player.CharacterAdded:Connect(function(character)
-                local forceField = character:FindFirstChildOfClass("ForceField")
-                if forceField then
-                    forceField:Destroy()
-                end
-            end)
-        end)
+        print("ForceField removal loop started.")
+        startLoop()
     else
-        print("Stopped removing ForceFields.") -- Print when toggle is off
+        print("ForceField removal loop stopped.")
+        stopLoop()
     end
 end)
+
 window:Slider("Walkspeed",16,100,20,function(t)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
 end)
