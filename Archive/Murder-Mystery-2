@@ -111,46 +111,6 @@ for _, player in pairs(game.Players:GetPlayers()) do
     setupPlayer(player)
 end
 
-local function teleportToGunDropAndBack()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local rootPart = character:WaitForChild("HumanoidRootPart")
-
-    -- Find the Normal object and then the GunDrop part inside it
-    local normalFolder = workspace:FindFirstChild("Normal")
-    if normalFolder then
-        local gunDrop = normalFolder:FindFirstChild("GunDrop")
-
-        if gunDrop then
-            -- Save the player's current position
-            local savedPosition = rootPart.CFrame
-
-            -- Teleport to the GunDrop part
-            rootPart.CFrame = gunDrop.CFrame + Vector3.new(0, 2, 0) -- Teleport 3 units above the GunDrop part
-
-            -- Wait for a brief moment to ensure the teleport is registered
-            wait(0.1) -- Adjust the wait time as needed
-
-            -- Teleport back to the saved position
-            rootPart.CFrame = savedPosition
-        else
-            -- Display a notification if the GunDrop part is not found
-            game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "Notification";
-                Text = "The gun has not been dropped yet.";
-                Duration = 2;
-            })
-        end
-    else
-        -- Display a notification if the Normal folder is not found
-        game:GetService("StarterGui"):SetCore("SendNotification",{
-            Title = "Notification";
-            Text = "The Normal folder is not found in the workspace.";
-            Duration = 2;
-        })
-    end
-end
-
 window:Toggle("ESP",false, function(t)
     getgenv().FLO = t
     if getgenv().FLO then
@@ -249,8 +209,33 @@ window:Toggle("Bring all enemies",false,function(t)
 end)
 
 window:Button("Teleport to gun", function()
-teleportToGunDropAndBack()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local originalPosition = humanoidRootPart.Position
+
+    local function findGunDropInDescendants(parent)
+        for _, descendant in ipairs(parent:GetDescendants()) do
+            if descendant.Name == "GunDrop" and descendant:IsA("BasePart") then
+                return descendant
+            end
+        end
+        return nil
+    end
+
+    local gunDrop = findGunDropInDescendants(workspace)
+
+    if gunDrop then
+        humanoidRootPart.CFrame = gunDrop.CFrame
+        wait(0.1)
+
+        humanoidRootPart.CFrame = CFrame.new(originalPosition)
+    else
+        print("GunDrop part not found in the workspace.")
+    end
 end)
+
 
 window:Button("Teleport to lobby", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-109.75447082519531, 154.662109375, 9.228076934814453)
