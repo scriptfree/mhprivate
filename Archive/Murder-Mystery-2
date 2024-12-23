@@ -242,7 +242,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-109.754
 end)
 
 window:Button("Teleport UI", function()
-loadstring(game:HttpGet("https://pastebin.com/raw/gDmAuwhC"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptfree/mhprivate/refs/heads/main/Archive/Teleport-UI"))()
 end)
 
 window:Slider("Walkspeed",16,30,16,function(t)
