@@ -76,7 +76,7 @@ local function teleportToCoins()
 
     -- If a Coin_Server is found and touched, teleport back to the specified coordinates
     if foundCoin then
-        rootPart.CFrame = CFrame.new(-95.58431243896484, 152.73521423339844, 105.27819061279297)
+        rootPart.CFrame = CFrame.new(-112.5636215209961, 135.0230255126953, 18.94784164428711)
     end
 end
 
